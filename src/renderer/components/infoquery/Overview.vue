@@ -5,163 +5,218 @@
         <span class="title">总览</span>
         <div id="overview-wrapper">
 
-            <div class="card-wrapper">
-                <div class="card-header">
-                    活跃天数
-                </div>
-                <div class="card-container">
-                    {{active_day_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    成就达成数
-                </div>
-                <div class="card-container">
-                    {{achievement_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    风神瞳
-                </div>
-                <div class="card-container">
-                    {{anemoculus_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    岩神瞳
-                </div>
-                <div class="card-container">
-                    {{geoculus_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    获得角色数
-                </div>
-                <div class="card-container">
-                    {{avatar_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    解锁传送点
-                </div>
-                <div class="card-container">
-                    {{way_point_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    解锁秘境
-                </div>
-                <div class="card-container">
-                    {{domain_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    深境螺旋
-                </div>
-                <div class="card-container">
-                    {{spiral_abyss}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    华丽宝箱数
-                </div>
-                <div class="card-container">
-                    {{luxurious_chest_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    珍贵宝箱数
-                </div>
-                <div class="card-container">
-                    {{precious_chest_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    精致宝箱数
-                </div>
-                <div class="card-container">
-                    {{exquisite_chest_number}}
-                </div>
-            </div>
-            <div class="card-wrapper">
-                <div class="card-header">
-                    普通宝箱数
-                </div>
-                <div class="card-container">
-                    {{common_chest_number}}
-                </div>
-            </div>
-
-        </div>
-        <span class="title" style="margin-top: 15px;">世界探索</span>
-        <div id="explorations-wrapper">
-            <div class="explore-wrapper">
-
-                <div class="explore-img" style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Dragonspine.png');">
-                </div>
-                <div class="explore-container">
-                    <div class="explore-container-header">
-                        {{Dragonspine.name}}
-                        <span class="explore-note"> 探索度{{Dragonspine.exploration_percentage/10}}%</span>
-
+            <a-row :gutter="[8,8]">
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            活跃天数
+                        </div>
+                        <div class="card-container">
+                            {{active_day_number}}
+                        </div>
                     </div>
-                    <a-progress class="explore-progress" :percent="Dragonspine.exploration_percentage/10" size="small" stroke-color="#CC3333"
-                        :stroke-width="3" :show-info="false" />
-                    <div class="explore-container-container">
-                        供奉等级：{{Dragonspine.level}}级
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            成就达成数
+                        </div>
+                        <div class="card-container">
+                            {{achievement_number}}
+                        </div>
                     </div>
-                </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            风神瞳
+                        </div>
+                        <div class="card-container">
+                            {{anemoculus_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            岩神瞳
+                        </div>
+                        <div class="card-container">
+                            {{geoculus_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            获得角色数
+                        </div>
+                        <div class="card-container">
+                            {{avatar_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            解锁传送点
+                        </div>
+                        <div class="card-container">
+                            {{way_point_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            解锁秘境
+                        </div>
+                        <div class="card-container">
+                            {{domain_number}}
+                        </div>
+                    </div>
+
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            深境螺旋
+                        </div>
+                        <div class="card-container">
+                            {{spiral_abyss}}
+                        </div>
+                    </div>
+
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            华丽宝箱数
+                        </div>
+                        <div class="card-container">
+                            {{luxurious_chest_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            珍贵宝箱数
+                        </div>
+                        <div class="card-container">
+                            {{precious_chest_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            精致宝箱数
+                        </div>
+                        <div class="card-container">
+                            {{exquisite_chest_number}}
+                        </div>
+                    </div>
+                </a-col>
+
+
+                <a-col :xs="24" :sm="24" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            普通宝箱数
+                        </div>
+                        <div class="card-container">
+                            {{common_chest_number}}
+                        </div>
+                    </div>
+                </a-col>
+            </a-row>
+
+
+            <span class="title" style="margin-top: 15px;">世界探索</span>
+            <div id="explorations-wrapper">
+
+                <a-row :gutter="[8,8]">
+                    <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="8" :xxl="8">
+                        <div class="explore-wrapper">
+
+                            <div class="explore-img"
+                                style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Dragonspine.png');">
+                            </div>
+                            <div class="explore-container">
+                                <div class="explore-container-header">
+                                    {{Dragonspine.name}}
+                                    <span class="explore-note"> 探索度{{Dragonspine.exploration_percentage/10}}%</span>
+
+                                </div>
+                                <a-progress class="explore-progress" :percent="Dragonspine.exploration_percentage/10"
+                                    size="small" stroke-color="#CC3333" :stroke-width="3" :show-info="false" />
+                                <div class="explore-container-container">
+                                    供奉等级：{{Dragonspine.level}}级
+                                </div>
+                            </div>
+                        </div>
+                    </a-col>
+                    <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="8" :xxl="8">
+                        <div class="explore-wrapper">
+
+                            <div class="explore-img"
+                                style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Mengde.png');">
+
+                            </div>
+                            <div class="explore-container">
+                                <div class="explore-container-header">
+                                    {{Mengde.name}}
+                                    <span class="explore-note"> 探索度{{Mengde.exploration_percentage/10}}%</span>
+
+                                </div>
+                                <a-progress class="explore-progress" :percent="Mengde.exploration_percentage/10"
+                                    size="small" stroke-color="#CC3333" :stroke-width="3" :show-info="false" />
+                                <div class="explore-container-container">
+                                    声望等级：{{Mengde.level}}级
+                                </div>
+                            </div>
+                        </div>
+                    </a-col>
+                    <a-col :xs="24" :sm="24" :md="24" :lg="24" :xl="8" :xxl="8">
+                        <div class="explore-wrapper">
+
+                            <div class="explore-img"
+                                style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Liyue.png');">
+
+                            </div>
+                            <div class="explore-container">
+                                <div class="explore-container-header">
+                                    {{Liyue.name}}
+                                    <span class="explore-note"> 探索度{{Liyue.exploration_percentage/10}}%</span>
+
+                                </div>
+                                <a-progress class="explore-progress" :percent="Liyue.exploration_percentage/10"
+                                    size="small" stroke-color="#CC3333" :stroke-width="3" :show-info="false" />
+                                <div class="explore-container-container">
+                                    声望等级：{{Liyue.level}}级
+                                </div>
+                            </div>
+                        </div>
+                    </a-col>
+                </a-row>
+
             </div>
 
-            <div class="explore-wrapper">
 
-                <div class="explore-img"
-                    style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Mengde.png');">
 
-                </div>
-                <div class="explore-container">
-                    <div class="explore-container-header">
-                        {{Mengde.name}}
-                        <span class="explore-note"> 探索度{{Mengde.exploration_percentage/10}}%</span>
 
-                    </div>
-                    <a-progress class="explore-progress" :percent="Mengde.exploration_percentage/10" size="small" stroke-color="#CC3333"
-                        :stroke-width="3" :show-info="false" />
-                    <div class="explore-container-container">
-                        声望等级：{{Mengde.level}}级
-                    </div>
-                </div>
-            </div>
-
-            <div class="explore-wrapper">
-
-                <div class="explore-img"
-                    style="background-image: url('https://upload-bbs.mihoyo.com/game_record/genshin/city_icon/UI_ChapterIcon_Liyue.png');">
-
-                </div>
-                <div class="explore-container">
-                    <div class="explore-container-header">
-                        {{Liyue.name}}
-                        <span class="explore-note"> 探索度{{Liyue.exploration_percentage/10}}%</span>
-
-                    </div>
-                    <a-progress class="explore-progress" :percent="Liyue.exploration_percentage/10" size="small"
-                        stroke-color="#CC3333" :stroke-width="3" :show-info="false" />
-                    <div class="explore-container-container">
-                        声望等级：{{Liyue.level}}级
-                    </div>
-                </div>
-            </div>
         </div>
 
 
@@ -295,8 +350,9 @@
         color: #404040;
         font-size: 14px;
         height: 100%;
-        background-color: rgb(250,250,250);
+        background-color: rgb(250, 250, 250);
     }
+
     #third-content-ov::-webkit-scrollbar {
         width: 5px;
         /*高宽分别对应横竖滚动条的尺寸*/
@@ -319,22 +375,21 @@
     }
 
     #overview-wrapper {
-        display: flex;
-        flex-wrap: wrap
+        max-width: 1280px;
     }
 
     .card-wrapper {
         height: 80px;
-        width: 160px;
+        /* width: 160px; */
         background-color: #fff;
         margin: 10px;
         margin-top: 0;
     }
 
     .card-header {
-        height: 30px;
+        height: 35px;
         font-size: 14px;
-        line-height: 30px;
+        line-height: 35px;
         box-sizing: border-box;
         padding-left: 10px;
         border-bottom: rgb(220, 220, 220) 1px solid;
@@ -353,7 +408,8 @@
     .explore-wrapper {
 
         height: 80px;
-        width: 256px;
+        /* width: 256px; */
+        max-width: 430px;
         background-color: #ec6e6ebd;
         margin: 10px;
         margin-top: 0;
@@ -370,12 +426,10 @@
     .explore-container {
         position: relative;
         float: left;
-        width: 165px;
-        /* width: 100%; */
-        /* width: calc(100%-80px); */
+        width: calc(100% - 90px);
 
         height: 80px;
-        /* background-color: #fff; */
+
     }
 
     .explore-note {
@@ -389,10 +443,6 @@
         top: 19px;
     }
 
-    #explorations-wrapper {
-        display: flex;
-        flex-wrap: wrap
-    }
 
     .explore-container-header {
         color: rgb(250, 250, 250);
@@ -413,13 +463,11 @@
         background-color: #ffefef;
     }
 
- 
+
 
     .note {
         width: 100%;
         margin-bottom: 7px;
         display: inline-block;
     }
-
-
 </style>

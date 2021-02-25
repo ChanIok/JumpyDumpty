@@ -40,7 +40,7 @@
             </a-row>
         </div>
 
-        
+
 
         <!-- <a-list item-layout="horizontal">
             <a-list-item v-for="(item,i) in spiralAbyss.reveal_rank" :key="i">
@@ -135,23 +135,25 @@
         },
         methods: {
             getConfig() {
-        
-                  axios.get('../../../../data/spiralAbyssInfo.json').then(res => {
+
+                axios.get('../../../../data/spiralAbyssInfo.json').then(res => {
                     if (res.status === 200) {
                         this.spiralAbyss = res.data.data
                     }
                 })
             },
             timestampToTime(timestamp) {
-                let date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-                let Y = date.getFullYear() + '-';
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                if (timestamp) {
+                    let date = new Date(timestamp * 1000); //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+                    let Y = date.getFullYear() + '-';
+                    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
 
-                let D = (date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ');
-                let h = (date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':');
-                let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':');
-                let s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
-                return Y + M + D + h + m + s;
+                    let D = (date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ');
+                    let h = (date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':');
+                    let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':');
+                    let s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+                    return Y + M + D + h + m + s;
+                }
             }
         }
     };

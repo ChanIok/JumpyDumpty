@@ -198,8 +198,8 @@ function createWindow() {
         win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true);
     })
 
-    // win.loadURL("http://localhost:8080")
-    win.loadFile('./src/renderer/index.html')
+    win.loadURL("http://localhost:8080")
+    // win.loadFile('./src/renderer/index.html')
     ipcData.contents = win.webContents
 }
 

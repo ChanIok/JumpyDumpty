@@ -14,7 +14,7 @@
                         style="width: 100%" />
                 </div>
             </div>
-            <span class="explain">Cookie获取方法可参考：https://github.com/yinghualuowu/GenshinDailyHelper</span>
+            <span class="explain">Cookie可自动开启功能自动获取。手动获取方法可参考：https://github.com/yinghualuowu/GenshinDailyHelper</span>
 
             <span class="note">自动抓取Cookie</span>
             <div class="hot-key-switch">
@@ -26,7 +26,7 @@
 
             <span class="title">关于</span>
             <span class="note">本程序开源且免费，项目地址：https://github.com/ChanIok/JumpyDumpty</span>
-            <span class="note">问题可直接在GitHub或NGA反馈：https://bbs.nga.cn/read.php?tid=25647353&page=4#pid495479398Anchor</span>
+            <span class="note">问题可直接在GitHub或NGA反馈：https://bbs.nga.cn/read.php?tid=25647353</span>
             <span class="explain">如果觉得有用，可以给个star，谢谢你</span>
             
         </div>
