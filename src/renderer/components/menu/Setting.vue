@@ -224,7 +224,7 @@
 
 
     #container::-webkit-scrollbar {
-        width: 5px;
+        width: 8px;
         /*高宽分别对应横竖滚动条的尺寸*/
         height: 1px;
     }
@@ -249,4 +249,5 @@
         left: calc(200px + 35%);
         bottom: 6px;
     }
+
 </style>

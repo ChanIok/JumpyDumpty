@@ -410,6 +410,7 @@
         height: 80px;
         /* width: 256px; */
         max-width: 430px;
+        min-width: 252px;
         background-color: #ec6e6ebd;
         margin: 10px;
         margin-top: 0;
