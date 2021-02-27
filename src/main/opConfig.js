@@ -1,8 +1,12 @@
 const path = require('path')
 const fs = require('fs')
 
+const {
+    createMap,
+} = require('./map/opMap')
 
-function initConfig(ipcData, mapConfig, createMap) {
+
+function initConfig(ipcData) {
 
     fs.mkdir(path.resolve(__dirname, '../../../../config'), function (error) {
         if (error) {
@@ -15,7 +19,7 @@ function initConfig(ipcData, mapConfig, createMap) {
             //     return false;
             // }
             // 文件夹已创建
-            loadConfig(ipcData, mapConfig, createMap)
+            loadConfig(ipcData)
         } else {
 
             let mapConfigWrite = {
@@ -25,6 +29,8 @@ function initConfig(ipcData, mapConfig, createMap) {
                 ifDelay: true,
             }
             let configWrite = {
+                className: 'UnityWndClass',
+                windowName: '原神',
                 ifAutoCookieButton: false,
             }
             let cookieWrite = {
@@ -33,7 +39,11 @@ function initConfig(ipcData, mapConfig, createMap) {
             let ocrConfigWrite = {
                 api: 'https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=',
                 ifDereplication: true,
-                hotKey: "Alt+R"
+                hotKey: "Alt+R",
+                widthRatio: 0.2450,
+                heightRatio:0.5100,
+                xPosRatio: 0.6800,
+                yPosRatio: 0.1100
             }
             let artifactsWrite = {
 
@@ -83,7 +93,7 @@ function initConfig(ipcData, mapConfig, createMap) {
                     })
 
                     setTimeout(() => {
-                        loadConfig(ipcData, mapConfig, createMap)
+                        loadConfig(ipcData)
                     }, 0);
                 }
             })
@@ -94,21 +104,22 @@ function initConfig(ipcData, mapConfig, createMap) {
 
 }
 
-function loadConfig(ipcData, mapConfig, callback) {
+function loadConfig(ipcData) {
     // initConfig()
 
-    let dataConfig = {}
-    fs.readFile(path.resolve(__dirname, '../../../../config/ocrConfig.json'), function (err, data) {
+    let ocrDataConfig = {}
+    fs.readFile(path.resolve(__dirname, '../../../../config/ocrConfig.json'), function (err, ocrDataRead) {
         if (err) {
             // throw err;
         } else {
-            console.log(ipcData, ipcData.ocrConfig)
-            dataConfig = JSON.parse(data.toString())
-            ipcData.ocrConfig.api = dataConfig.api
-            ipcData.ocrConfig.hotKey = dataConfig.hotKey
-            ipcData.ocrConfig.ifDereplication = dataConfig.ifDereplication
-
-
+            ocrDataConfig = JSON.parse(ocrDataRead.toString())
+            ipcData.ocrConfig.api = ocrDataConfig.api
+            ipcData.ocrConfig.hotKey = ocrDataConfig.hotKey
+            ipcData.ocrConfig.ifDereplication = ocrDataConfig.ifDereplication
+            ipcData.ocrConfig.widthRatio = ocrDataConfig.widthRatio
+            ipcData.ocrConfig.heightRatio = ocrDataConfig.heightRatio
+            ipcData.ocrConfig.xPosRatio = ocrDataConfig.xPosRatio
+            ipcData.ocrConfig.yPosRatio = ocrDataConfig.yPosRatio
         }
     });
 
@@ -119,16 +130,30 @@ function loadConfig(ipcData, mapConfig, callback) {
         } else {
             mapDataConfig = JSON.parse(dataMapRead.toString())
 
-            mapConfig.link = mapDataConfig.link
-            mapConfig.hotKey = mapDataConfig.hotKey
-            mapConfig.ifHotKey = mapDataConfig.ifHotKey
-            mapConfig.ifDelay = mapDataConfig.ifDelay
+            ipcData.mapConfig.link = mapDataConfig.link
+            ipcData.mapConfig.hotKey = mapDataConfig.hotKey
+            ipcData.mapConfig.ifHotKey = mapDataConfig.ifHotKey
+            ipcData.mapConfig.ifDelay = mapDataConfig.ifDelay
             if (mapDataConfig.ifHotKey) {
-                callback()
+
+                createMap(ipcData)
+
             }
-            console.log(mapConfig)
         }
     });
+
+    let dataConfig = {}
+    fs.readFile(path.resolve(__dirname, '../../../../config/config.json'), function (err, dataRead) {
+        if (err) {
+            // throw err;
+        } else {
+            dataConfig = JSON.parse(dataRead.toString())
+            ipcData.config.className = dataConfig.className
+            ipcData.config.windowName = dataConfig.windowName
+            ipcData.config.ifAutoCookieButton = dataConfig.ifAutoCookieButton
+        }
+    });
+
 }
 
 

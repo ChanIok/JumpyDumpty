@@ -1,6 +1,6 @@
 const ioHook = require('iohook')
 
-const addonCatch = require('../build/Release/ArtifactsCatch.node')
+// const addonCatch = require('../build/Release/ArtifactsCatch.node')
 
 
 const {
@@ -26,6 +26,7 @@ const {
 let ifOCRHotKey = false
 let ifOCRing = false
 let ifInit = false
+let ifMouseClick = false
 
 // 显示系统通知
 function showNotification(res) {
@@ -53,38 +54,37 @@ function showNotification(res) {
 }
 
 function ocrHotKeyRegister(ipcData) {
-    // 检测热键是否被注册
-    
-  globalShortcut.register(ipcData.ocrConfig.hotKey, () => {
+    // 注册热键
+    globalShortcut.register(ipcData.ocrConfig.hotKey, () => {
         // 关闭热键OCR
         if (ifOCRHotKey) {
             ifOCRHotKey = false
             ipcData.contents.send("ocrShotCutClose")
             showNotification("close")
-            console.log("close-ocr")
             ioStop()
         } else { // 开启
-            if (!ifInit) {
-                ifInit = true
-                // 鼠标按下
-                ioHook.on('mousedown', () => {
-                    ifMouseClick = true
-                });
-                ioHook.on('mouseup', () => {
-                    if (ifMouseClick && !ifOCRing) {
-                        ifOCRing = true
-                        ipcData.contents.send("ocrShotCutWorking")
-                        console.log("ocr-working")
-                        setTimeout(ocrArtifac, 50)
-                        setTimeout(() => {
-                            ifOCRing = false
-                        }, 50)
-                    }
-                });
-                ioHook.on('mousedrag', () => {
-                    ifMouseClick = false
-                });
-            }
+
+            // 鼠标按下
+            ioHook.on('mousedown', () => {
+                ifMouseClick = true
+            });
+            ioHook.on('mouseup', () => {
+                if (ifMouseClick && !ifOCRing) {
+                    ifOCRing = true
+                    ipcData.contents.send("ocrShotCutWorking")
+                    // 延迟发送OCR请求
+                    setTimeout(() => {
+                        ocrArtifac(ipcData)
+                    }, 50)
+                    setTimeout(() => {
+                        ifOCRing = false
+                    }, 50)
+                }
+            });
+            ioHook.on('mousedrag', () => {
+                ifMouseClick = false
+            });
+
             console.log("start-ocr")
             ifOCRHotKey = true
             showNotification("open")
@@ -92,22 +92,17 @@ function ocrHotKeyRegister(ipcData) {
             ioStart()
         }
     })
-    
-  
+
+
 }
 
 
 
-function ocrArtifac() {
-    console.log("ready-to-catch")
-    addonCatch.ArtifactsCatch()
-    console.log("catched")
-
-    ocrArtifactDetails(true)
-
+function ocrArtifac(ipcData) {
+    ocrArtifactDetails(ipcData, true)
 }
 
-let ifMouseClick = false
+
 
 function ioStart() {
     ioHook.start()

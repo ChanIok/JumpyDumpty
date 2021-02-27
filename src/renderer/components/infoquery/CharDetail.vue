@@ -318,9 +318,12 @@
         padding-left: 40px;
         padding-right: 40px;
         /* flex-direction: column; */
+        box-sizing: border-box;
+        box-shadow: -1px 8px 8px rgb(211, 211, 211);
+        background-color: rgba(250, 250, 250, 0.98);
         overflow: auto;
     }
-
+    
     #list-wrapper::-webkit-scrollbar {
         width: 8px;
         /*高宽分别对应横竖滚动条的尺寸*/

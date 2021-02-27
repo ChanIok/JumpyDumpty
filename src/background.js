@@ -4,21 +4,15 @@ const {
     ipcMain,
     Tray,
     Menu,
-    globalShortcut
 } = require('electron')
 
-const addonSwitch = require('./build/Release/SwitchToGame.node');
-const addonCatch = require('./build/Release/ArtifactsCatch.node');
 const path = require('path')
 const gotTheLock = app.requestSingleInstanceLock()
 
-const fs = require('fs')
 
 const {
     initConfig,
-    loadConfig,
     writeConfig,
-    writeMapConfig,
     writeOcrConfig,
 } = require('./main/opConfig')
 
@@ -48,71 +42,42 @@ const {
 } = require('./main/iohook')
 
 
-
-
-
 let win
-let contents
 let willQuitApp = false
-let mapwin
 let ipcData = {
     ocrConfig: {
-        api:'default',
-        hotKey:'default',
-        ifDereplication:'default'
+        api: 'default',
+        hotKey: 'default',
+        ifDereplication: 'default',
+        className:'',
+        windowName:'',
+        WidthRatio:'',
+        HeightRatio:'',
+        XPosRatio:'',
+        YPosRatio:''
+    },
+    mapConfig: {
+        link: '',
+        hotKey: '',
+        ifHotKey: '',
+        ifDelay: ''
+    },
+    config:{
+        className:'',
+        windowName:'',
+        ifAutoCookieButton:false
     }
 }
 
-
 let config = {}
-let mapConfig = {
-    link: "",
-    hotKey: "",
-    ifHotKey: false,
-    ifDelay: true,
-}
-
 
 function handleIPCmain() {
-    ipcMain.on('createMap', () => {
-        mapConfig.ifHotKey = true
-        writeMapConfig(mapConfig)
-        createMap()
-    })
-    ipcMain.on('destroyMap', () => {
-        mapConfig.ifHotKey = false
-        writeMapConfig(mapConfig)
-        if (mapwin != null) {
-            destroyMap()
-            console.log("destroy")
-        }
-    })
-    ipcMain.on('reloadMap', () => {
-        reloadMap()
-    })
-    ipcMain.on('writeMapUrl', (e, data) => {
-        mapConfig.link = data
-        writeMapConfig(mapConfig)
-    })
-    ipcMain.on('writeMapIfDelay', (e, data) => {
-        mapConfig.ifDelay = data
-        writeMapConfig(mapConfig)
-    })
-    ipcMain.on('writeMapHotKey', (e, data) => {
-        globalShortcut.unregister(mapConfig.hotKey)
-        mapConfig.hotKey = data
-        writeMapConfig(mapConfig)
-        mapShotCutRegister()
-    })
     ipcMain.on('getInfo', (e, data) => {
         getUserInfo(data, () => {
             e.reply('getInfoFinished')
         })
     })
-    ipcMain.on('writeifAutoCookie', (e, data) => {
-        config.ifAutoCookieButton = data
-        writeConfig(config)
-    })
+
     ipcMain.on('writeCookie', (e, data) => {
         writeCookie(data)
     })
@@ -121,14 +86,7 @@ function handleIPCmain() {
             e.reply('getCookieFinished')
         })
     })
-    ipcMain.on('artifactsCatch', (e) => {
-        console.log("ready-to-catch")
-        addonCatch.ArtifactsCatch()
-        console.log("catched")
-        ocrArtifactDetails(false, () => {
-            e.reply("artifactsCatchFinished")
-        })
-    })
+
     ipcMain.on('writeApi', (e, value) => {
         console.log("ready-to-write-api")
         ipcData.ocrConfig.api = value
@@ -153,10 +111,8 @@ function handleIPCmain() {
             e.reply("expoetToClicpBoardFinished")
         })
     })
-
-
-
 }
+
 
 function createWindow() {
     // 创建浏览器窗口
@@ -198,92 +154,11 @@ function createWindow() {
         win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true);
     })
 
-    win.loadURL("http://localhost:8080")
-    // win.loadFile('./src/renderer/index.html')
+    // win.loadURL("http://localhost:8080")
+    win.loadFile('./src/renderer/index.html')
     ipcData.contents = win.webContents
+    ipcData.win = win
 }
-
-
-
-function reloadMap() {
-    // 开关打开才重载入
-    if (mapConfig.ifHotKey) {
-        if (mapwin == null) {
-            createMap()
-        } else {
-            destroyMap()
-            createMap()
-        }
-    }
-}
-
-function createMap() {
-    let dataLink = ""
-    fs.readFile(path.resolve(__dirname, '../../../config/mapconfig.json'), function (err, data) {
-        if (err) {
-            throw err;
-        } else {
-            dataLink = "https://" + JSON.parse(data.toString()).link
-            // console.log(dataLink)
-            mapwin = new BrowserWindow({
-                width: 1920,
-                height: 1080,
-                frame: false,
-                parent: win, //win是主窗口
-                fullscreen: true,
-                show: false
-            })
-            mapwin.hide()
-            mapwin.loadURL(dataLink); //new.html是新开窗口的渲染进程
-            console.log("load", dataLink)
-            // globalShortcut.register(mapConfig.hotKey, () => {
-            //     if (mapwin.isVisible()) {
-            //         if (mapConfig.ifDelay) {
-            //             addonSwitch.SwitchToGame()
-            //             setTimeout(() => {
-            //                 mapwin.hide()
-            //             }, 500)
-            //         } else {
-            //             addonSwitch.SwitchToGame()
-            //             mapwin.hide()
-            //         }
-            //     } else {
-            //         mapwin.show()
-            //     }
-            // })
-            mapShotCutRegister()
-
-            mapwin.on('closed', () => {
-                mapwin = null
-            })
-        }
-    });
-}
-
-
-function destroyMap() {
-    mapwin.destroy()
-    globalShortcut.unregister(mapConfig.hotKey)
-}
-
-function mapShotCutRegister() {
-    globalShortcut.register(mapConfig.hotKey, () => {
-        if (mapwin.isVisible()) {
-            if (mapConfig.ifDelay) {
-                addonSwitch.SwitchToGame()
-                setTimeout(() => {
-                    mapwin.hide()
-                }, 500)
-            } else {
-                addonSwitch.SwitchToGame()
-                mapwin.hide()
-            }
-        } else {
-            mapwin.show()
-        }
-    })
-}
-
 
 
 
@@ -297,22 +172,18 @@ if (!gotTheLock) {
             win.restore()
         } else if (!win.isVisible()) {
             win.show()
-            // win.setSkipTaskbar(true)
         }
         win.focus()
-
     })
     app.on('ready', () => {
         createWindow()
-        initConfig(ipcData,mapConfig, createMap) //加载设置，引用类型传参，加载后回调创建地图
+        initConfig(ipcData) //加载设置，引用类型传参，加载后回调创建地图
         handleIPCmain()
         handleIPC(ipcData)
 
         setTimeout(() => {
             ocrHotKeyRegister(ipcData)
         }, 1000);
-        
-        // getCookie()
     })
 }
 
@@ -327,8 +198,6 @@ app.on('before-quit', () => {
 
 // 当全部窗口关闭时退出。
 app.on('window-all-closed', () => {
-    // 在 macOS 上，除非用户用 Cmd + Q 确定地退出，
-    // 否则绝大部分应用及其菜单栏会保持激活。
     if (process.platform !== 'darwin') {
         app.quit()
     }

@@ -19,7 +19,7 @@ const {
     sendMsgToFloatingWin
 } = require('./floatingWin');
 
-
+const addonShot = require('../build/Release/ScreenShot.node');
 
 let artifactNotification = {
     result: '',
@@ -94,7 +94,12 @@ function saveAccessToken(value) {
     })
 }
 
-function ocrArtifactDetails(ifShow, callback) {
+function ocrArtifactDetails(ipcData, ifShow, callback) {
+
+
+    // 截图
+    addonShot.shot(ipcData.config.className, ipcData.config.windowName, ipcData.ocrConfig.widthRatio, ipcData.ocrConfig.heightRatio, ipcData.ocrConfig.xPosRatio, ipcData.ocrConfig.yPosRatio)
+
     let img = clipboard.readImage()
     if (!img.isEmpty()) {
         let imgUrl = img.toDataURL()
@@ -149,6 +154,7 @@ function ocrArtifactDetails(ifShow, callback) {
         })
         // console.log(imgUrl)
     }
+
 }
 
 function handleOcrData(ocrData, ifShow, callback) {
@@ -490,7 +496,7 @@ function writeOCRData(writeData, ifShow, callback) {
                                 let temp = dataSource[itemName]
                                 for (let tempItem in temp) {
                                     // 有重复的
-                                 
+
                                     if (temp[tempItem].id == writeData.id) {
 
                                         if (callback) {
