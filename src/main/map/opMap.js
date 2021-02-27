@@ -9,14 +9,14 @@ const addonSwitch = require('../../build/Release/SwitchToWindow.node');
 
 let mapwin
 
-function reloadMap() {
+function reloadMap(ipcData) {
     // 开关打开才重载入
     if (ipcData.mapConfig.ifHotKey) {
         if (mapwin == null) {
-            createMap()
+            createMap(ipcData)
         } else {
-            destroyMap()
-            createMap()
+            destroyMap(ipcData.mapConfig)
+            createMap(ipcData)
         }
     }
 }

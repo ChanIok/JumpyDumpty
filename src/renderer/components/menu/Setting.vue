@@ -27,7 +27,7 @@
             <span class="title">进阶设置</span>
             <span class="explain" style="margin-bottom: 15px;">普通用户请勿修改此处设置！</span>
             <span class="note">窗口句柄设置</span>
-            <div>
+            <div style="position: relative;">
                 <div id="class-name-input">
                     <a-input default-value="" v-model="className" placeholder="请输入窗口类名" @change="saveAdvancedConfig"
                         style="width: 30%" />
@@ -58,6 +58,12 @@
                     <a-input default-value="" v-model="yPosRatio" placeholder="请输入截图起始Y坐标比例"
                         @change="saveAdvancedConfig" style="width: 30%" />
                     <span class="input-explain">截图起始Y坐标比例</span>
+                </div>
+
+                <div id="advanced-config-reset-button">
+                    <a-button type="primary" @click="advancedConfigReset">
+                        重置默认值
+                    </a-button>
                 </div>
             </div>
 
@@ -141,6 +147,15 @@
             },
             saveCookie() {
                 ipcRenderer.send("writeCookie", this.cookieValue);
+            },
+            advancedConfigReset() {
+                this.className = 'UnityWndClass',
+                    this.windowName = '原神',
+                    this.widthRatio = 0.2450,
+                    this.heightRatio = 0.5100,
+                    this.xPosRatio = 0.6800,
+                    this.yPosRatio = 0.1100,
+                    this.saveAdvancedConfig()
             },
             saveAdvancedConfig() {
                 ipcRenderer.send("writeAdvancedConfig", this.className, this.windowName, this.widthRatio, this
@@ -227,5 +242,11 @@
         box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
         border-radius: 10px;
         background: #EDEDED;
+    }
+
+    #advanced-config-reset-button {
+        position: absolute;
+        left: calc(200px + 35%);
+        bottom: 6px;
     }
 </style>

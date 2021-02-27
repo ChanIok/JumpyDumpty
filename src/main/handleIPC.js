@@ -82,7 +82,7 @@ function handleIPC(ipcData) {
         destroyMap(ipcData.mapConfig)
     })
     ipcMain.on('reloadMap', () => {
-        reloadMap()
+        reloadMap(ipcData)
     })
 
     // 地图设置相关
