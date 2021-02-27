@@ -59,7 +59,7 @@ Electron + Vue + AntDesign
 
 ## 使用：
 
-v1.0.8 已打包，解压直接运行：  
+v1.0.9 已打包，解压直接运行：  
 https://wws.lanzous.com/b01zxfq8j
 密码:boom
 
