@@ -27,7 +27,7 @@ int ScreenCatch(char *ClassName, char *WindowName, double WidthRatio, double Hei
 		memBitmap.CreateCompatibleBitmap(pDC, Width, Height);
 
 		oldmemBitmap = memDC.SelectObject(&memBitmap);
-		memDC.BitBlt(0, 0, Width, Height, pDC, XPosRatio * pDC->GetDeviceCaps(HORZRES), YPosRatio * pDC->GetDeviceCaps(VERTRES), SRCCOPY)
+		memDC.BitBlt(0, 0, Width, Height, pDC, XPosRatio * pDC->GetDeviceCaps(HORZRES), YPosRatio * pDC->GetDeviceCaps(VERTRES), SRCCOPY);
 	}
 	else
 	{

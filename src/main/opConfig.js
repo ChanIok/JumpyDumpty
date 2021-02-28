@@ -41,9 +41,10 @@ function initConfig(ipcData) {
                 ifDereplication: true,
                 hotKey: "Alt+R",
                 widthRatio: 0.2450,
-                heightRatio:0.5100,
+                heightRatio: 0.5100,
                 xPosRatio: 0.6800,
-                yPosRatio: 0.1100
+                yPosRatio: 0.1100,
+                ifFullScreen: false
             }
             let artifactsWrite = {
 
@@ -120,6 +121,7 @@ function loadConfig(ipcData) {
             ipcData.ocrConfig.heightRatio = ocrDataConfig.heightRatio
             ipcData.ocrConfig.xPosRatio = ocrDataConfig.xPosRatio
             ipcData.ocrConfig.yPosRatio = ocrDataConfig.yPosRatio
+            ipcData.ocrConfig.ifFullScreen = ocrDataConfig.ifFullScreen
         }
     });
 

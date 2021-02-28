@@ -98,7 +98,7 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
 
 
     // 截图
-    addonShot.shot(ipcData.config.className, ipcData.config.windowName, ipcData.ocrConfig.widthRatio, ipcData.ocrConfig.heightRatio, ipcData.ocrConfig.xPosRatio, ipcData.ocrConfig.yPosRatio)
+    addonShot.shot(ipcData.config.className, ipcData.config.windowName, ipcData.ocrConfig.widthRatio, ipcData.ocrConfig.heightRatio, ipcData.ocrConfig.xPosRatio, ipcData.ocrConfig.yPosRatio,ipcData.ocrConfig.ifFullScreen==true?1:0)
 
     let img = clipboard.readImage()
     if (!img.isEmpty()) {

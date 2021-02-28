@@ -102,12 +102,13 @@ function handleIPC(ipcData) {
     })
 
     // 进阶设置修改
-    ipcMain.on('writeAdvancedConfig', (e, value1, value2, value3, value4, value5, value6) => {
-
-        ipcData.ocrConfig.widthRatio = value3
-        ipcData.ocrConfig.heightRatio = value4
-        ipcData.ocrConfig.xPosRatio = value5
-        ipcData.ocrConfig.yPosRatio = value6
+    ipcMain.on('writeAdvancedConfig', (e, value1, value2, value3, value4, value5, value6,value7) => {
+        
+        ipcData.ocrConfig.ifFullScreen = value3
+        ipcData.ocrConfig.widthRatio = parseFloat(value4)
+        ipcData.ocrConfig.heightRatio = parseFloat(value5)
+        ipcData.ocrConfig.xPosRatio = parseFloat(value6)
+        ipcData.ocrConfig.yPosRatio = parseFloat(value7)
 
         writeOcrConfig(ipcData.ocrConfig)
 

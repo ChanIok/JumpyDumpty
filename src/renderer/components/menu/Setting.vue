@@ -39,6 +39,11 @@
                     <span class="input-explain">窗口名</span>
                 </div>
                 <span class="note" style="margin-top: 10px;margin-bottom: 5px;">OCR截图设置</span>
+                <span class="note" style="font-weight: 300;">全屏截图模式</span>
+                <div class="hot-key-switch">
+                    <a-switch @change=" saveifFullScreenConfig" :checked="ifFullScreenButton" />
+                </div>
+                <span class="explain" style="margin-bottom: 10px;">如若找不到窗口或截图失败可启用该功能</span>
                 <div id="width-ratio-input">
                     <a-input default-value="" v-model="widthRatio" placeholder="请输入截图宽度比例" @change="saveAdvancedConfig"
                         style="width: 30%" />
@@ -94,6 +99,7 @@
                 ifAutoCookieButton: false,
                 className: 'UnityWndClass',
                 windowName: '原神',
+                ifFullScreenButton: false,
                 widthRatio: 0.2450,
                 heightRatio: 0.5100,
                 xPosRatio: 0.6800,
@@ -124,12 +130,18 @@
                         } else {
                             this.ifAutoCookieButton = false
                         }
+
                         this.className = res.data.className
                         this.windowName = res.data.windowName
                     }
                 })
                 axios.get('../../../../config/ocrConfig.json').then(res => {
                     if (res.status === 200) {
+                        if (res.data.ifFullScreen) {
+                            this.ifFullScreenButton = true
+                        } else {
+                            this.ifFullScreenButton = false
+                        }
                         this.widthRatio = res.data.widthRatio
                         this.heightRatio = res.data.heightRatio
                         this.xPosRatio = res.data.xPosRatio
@@ -151,14 +163,28 @@
             advancedConfigReset() {
                 this.className = 'UnityWndClass',
                     this.windowName = '原神',
-                    this.widthRatio = 0.2450,
+                    this.ifFullScreenButton = false
+                this.widthRatio = 0.2450,
                     this.heightRatio = 0.5100,
                     this.xPosRatio = 0.6800,
                     this.yPosRatio = 0.1100,
                     this.saveAdvancedConfig()
             },
+            saveifFullScreenConfig(checked) {
+                if (checked) {
+                    this.ifFullScreenButton = true
+                } else {
+                    this.ifFullScreenButton = false
+                }
+                ipcRenderer.send("writeAdvancedConfig", this.className, this.windowName, this.ifFullScreenButton, this
+                    .widthRatio, this
+                    .heightRatio, this
+                    .xPosRatio, this
+                    .yPosRatio)
+            },
             saveAdvancedConfig() {
-                ipcRenderer.send("writeAdvancedConfig", this.className, this.windowName, this.widthRatio, this
+                ipcRenderer.send("writeAdvancedConfig", this.className, this.windowName, this.ifFullScreenButton, this
+                    .widthRatio, this
                     .heightRatio, this
                     .xPosRatio, this
                     .yPosRatio)
@@ -249,5 +275,4 @@
         left: calc(200px + 35%);
         bottom: 6px;
     }
-
 </style>
