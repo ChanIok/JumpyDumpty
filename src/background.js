@@ -49,12 +49,10 @@ let ipcData = {
         api: 'default',
         hotKey: 'default',
         ifDereplication: 'default',
-        className:'',
-        windowName:'',
-        WidthRatio:'',
-        HeightRatio:'',
-        XPosRatio:'',
-        YPosRatio:''
+        widthRatio:'',
+        heightRatio:'',
+        xPosRatio:'',
+        yPosRatio:''
     },
     mapConfig: {
         link: '',
