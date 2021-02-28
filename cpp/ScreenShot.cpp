@@ -36,8 +36,8 @@ int ScreenCatch(char *ClassName, char *WindowName, double WidthRatio, double Hei
 		GetClientRect(window, &rect);
 
 		int Width = WidthRatio * (rect.right - rect.left);
-		int Height = HeightRatio * (rect.bottom - rect.top);
-
+		int Height = HeightRatio * (rect.bottom - rect.top); 
+		
 		CDC memDC;
 		memDC.CreateCompatibleDC(pDC);
 
