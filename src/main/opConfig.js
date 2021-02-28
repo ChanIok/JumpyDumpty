@@ -52,19 +52,20 @@ function initConfig(ipcData) {
             let baiduTokenWrite = {
                 access_token: ""
             }
-
-            fs.writeFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), JSON.stringify(baiduTokenWrite, null, 4), (err) => {
-                if (err) throw err
-                else {
-
-                }
-            })
+            
             fs.writeFile(path.resolve(__dirname, '../../../../config/mapconfig.json'), JSON.stringify(mapConfigWrite, null, 4), (err) => {
                 if (err) throw err
                 else {
 
                 }
             })
+            fs.writeFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), JSON.stringify(baiduTokenWrite, null, 4), (err) => {
+                if (err) throw err
+                else {
+
+                }
+            })
+
             fs.writeFile(path.resolve(__dirname, '../../../../config/config.json'), JSON.stringify(configWrite, null, 4), (err) => {
                 if (err) throw err
                 else {

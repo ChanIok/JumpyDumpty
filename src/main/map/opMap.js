@@ -22,35 +22,30 @@ function reloadMap(ipcData) {
 }
 
 function createMap(ipcData, callback) {
-    let dataLink = ""
-    fs.readFile(path.resolve(__dirname, '../../../../../config/mapconfig.json'), function (err, data) {
-        if (err) {
-            throw err;
-        } else {
-            dataLink = "https://" + JSON.parse(data.toString()).link
-            mapwin = new BrowserWindow({
-                width: 1920,
-                height: 1080,
-                frame: false,
-                parent: ipcData.win, //win是主窗口
-                fullscreen: true,
-                show: false
-            })
-            mapwin.hide()
-            mapwin.loadURL(dataLink);
-            console.log("load", dataLink)
+    let dataLink = "https://" + ipcData.mapConfig.link
+    mapwin = new BrowserWindow({
+        width: 1920,
+        height: 1080,
+        frame: false,
+        parent: ipcData.win, //win是主窗口
+        fullscreen: true,
+        show: false
+    })
+    mapwin.hide()
+    mapwin.loadURL(dataLink);
+    console.log("load", dataLink)
 
-            mapShotCutRegister(ipcData)
+    mapShotCutRegister(ipcData)
 
-            mapwin.on('closed', () => {
-                mapwin = null
-            })
-            if (callback) {
-                callback()
-            }
+    mapwin.on('closed', () => {
+        mapwin = null
+    })
+    if (callback) {
+        callback()
+    }
 
-        }
-    });
+
+
 }
 
 
