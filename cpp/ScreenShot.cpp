@@ -5,34 +5,47 @@
 
 #define WIN32_LEAN_AND_MEAN
 
-int ScreenCatch(char *ClassName, char *WindowName, double WidthRatio, double HeightRatio, double XPosRatio, double YPosRatio)
+int ScreenCatch(char *ClassName, char *WindowName, double WidthRatio, double HeightRatio, double XPosRatio, double YPosRatio, int FullScreen)
 {
 
 	CDC *pDC;
 
 	HWND window;
 	RECT rect;
-
-	window = FindWindow(ClassName, WindowName);
-	// window = FindWindow("UnityWndClass", "原神");
-	// SwitchToThisWindow(window, TRUE);
-
-	pDC = CDC::FromHandle(GetDC(window));
-
-	GetClientRect(window, &rect);
-	int BitPerPixel = pDC->GetDeviceCaps(BITSPIXEL);
-
-	int Width = WidthRatio * (rect.right - rect.left);
-	int Height = HeightRatio * (rect.bottom - rect.top);
-
-	CDC memDC;
-	memDC.CreateCompatibleDC(pDC);
-
 	CBitmap memBitmap, *oldmemBitmap;
-	memBitmap.CreateCompatibleBitmap(pDC, Width, Height);
 
-	oldmemBitmap = memDC.SelectObject(&memBitmap);
-	memDC.BitBlt(0, 0, Width, Height, pDC, XPosRatio * (rect.right - rect.left), YPosRatio * (rect.bottom - rect.top), SRCCOPY);
+	if (FullScreen > 0)
+	{
+		pDC = CDC::FromHandle(GetDC(NULL));
+
+		int Width = WidthRatio * pDC->GetDeviceCaps(HORZRES);
+		int Height = HeightRatio * pDC->GetDeviceCaps(VERTRES);
+
+		CDC memDC;
+		memDC.CreateCompatibleDC(pDC);
+
+		memBitmap.CreateCompatibleBitmap(pDC, Width, Height);
+
+		oldmemBitmap = memDC.SelectObject(&memBitmap);
+		memDC.BitBlt(0, 0, Width, Height, pDC, XPosRatio * pDC->GetDeviceCaps(HORZRES), YPosRatio * pDC->GetDeviceCaps(VERTRES), SRCCOPY)
+	}
+	else
+	{
+		window = FindWindow(ClassName, WindowName);
+		pDC = CDC::FromHandle(GetDC(window));
+		GetClientRect(window, &rect);
+
+		int Width = WidthRatio * (rect.right - rect.left);
+		int Height = HeightRatio * (rect.bottom - rect.top);
+
+		CDC memDC;
+		memDC.CreateCompatibleDC(pDC);
+
+		memBitmap.CreateCompatibleBitmap(pDC, Width, Height);
+
+		oldmemBitmap = memDC.SelectObject(&memBitmap);
+		memDC.BitBlt(0, 0, Width, Height, pDC, XPosRatio * (rect.right - rect.left), YPosRatio * (rect.bottom - rect.top), SRCCOPY);
+	}
 
 	BITMAP bmp;
 	memBitmap.GetBitmap(&bmp);
@@ -67,8 +80,8 @@ static napi_value Shot(napi_env env, napi_callback_info info)
 {
 	napi_status status;
 
-	size_t argc = 6;
-	napi_value args[6];
+	size_t argc = 7;
+	napi_value args[7];
 	status = napi_get_cb_info(env, info, &argc, args, NULL, NULL);
 
 	// 窗口类名
@@ -102,7 +115,11 @@ static napi_value Shot(napi_env env, napi_callback_info info)
 	double value6;
 	status = napi_get_value_double(env, args[5], &value6);
 
-	int res = ScreenCatch(str1, str2_u, value3, value4, value5, value6);
+	// 是否全屏截图
+	int value7;
+	status = napi_get_value_int32(env, args[6], &value7);
+
+	int res = ScreenCatch(str1, str2_u, value3, value4, value5, value6, value7);
 
 	// 没什么用的返回值
 	napi_value ReturnValue;
