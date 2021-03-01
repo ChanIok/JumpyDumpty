@@ -137,6 +137,12 @@ function createWindow() {
     //创建系统通知区菜单
     tray = new Tray(path.resolve(__dirname, './assets/logo.ico'));
     const contextMenu = Menu.buildFromTemplate([{
+        label: '显示界面',
+        click: () => {
+            win.show()
+        }},{
+            type:'separator'
+        },{
             label: '退出',
             click: () => {
                 // win.destroy()
