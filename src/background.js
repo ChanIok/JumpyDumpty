@@ -4,6 +4,7 @@ const {
     ipcMain,
     Tray,
     Menu,
+    autoUpdater,
 } = require('electron')
 
 const path = require('path')
@@ -41,6 +42,9 @@ const {
     ocrHotKeyRegister
 } = require('./main/iohook')
 
+const {
+    runAutoUpdate
+} = require('./main/controls/update')
 
 let win
 let willQuitApp = false
@@ -49,10 +53,10 @@ let ipcData = {
         api: 'default',
         hotKey: 'default',
         ifDereplication: 'default',
-        widthRatio:'',
-        heightRatio:'',
-        xPosRatio:'',
-        yPosRatio:''
+        widthRatio: '',
+        heightRatio: '',
+        xPosRatio: '',
+        yPosRatio: ''
     },
     mapConfig: {
         link: '',
@@ -60,10 +64,11 @@ let ipcData = {
         ifHotKey: '',
         ifDelay: ''
     },
-    config:{
-        className:'',
-        windowName:'',
-        ifAutoCookieButton:false
+    config: {
+        className: '',
+        windowName: '',
+        ifAutoCookieButton: false,
+        ifAutoUpdate:true
     }
 }
 
@@ -137,17 +142,18 @@ function createWindow() {
     //创建系统通知区菜单
     tray = new Tray(path.resolve(__dirname, './assets/logo.ico'));
     const contextMenu = Menu.buildFromTemplate([{
-        label: '显示界面',
-        click: () => {
-            win.show()
-        }},{
-            type:'separator'
-        },{
+            label: '显示界面',
+            click: () => {
+                win.show()
+            }
+        }, {
+            type: 'separator'
+        }, {
             label: '退出',
             click: () => {
-                // win.destroy()
+                win.destroy()
                 // app.quit()
-                app.exit()
+                // app.exit()
             }
         }, //直接强制退出
     ])
@@ -181,9 +187,17 @@ if (!gotTheLock) {
     })
     app.on('ready', () => {
         createWindow()
-        initConfig(ipcData) //加载设置，引用类型传参，加载后回调创建地图
+        initConfig(ipcData) //加载设置
         handleIPCmain()
         handleIPC(ipcData)
+
+
+        setTimeout(() => {
+            if(ipcData.config.ifAutoUpdate){
+                console.log("auto-update")
+                runAutoUpdate(win)
+            }
+        }, 5000);
 
         setTimeout(() => {
             ocrHotKeyRegister(ipcData)
@@ -197,16 +211,10 @@ app.whenReady().then(() => {})
 
 app.on('before-quit', () => {
     ioExit()
+    console.log("before-quit")
 });
 
 
-// 当全部窗口关闭时退出。
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-
-})
 
 app.on('activate', () => {
     if (win === null) {

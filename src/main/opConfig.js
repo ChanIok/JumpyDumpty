@@ -32,6 +32,7 @@ function initConfig(ipcData) {
                 className: 'UnityWndClass',
                 windowName: '原神',
                 ifAutoCookieButton: false,
+                ifAutoUpdate:true
             }
             let cookieWrite = {
                 cookie: "",
@@ -154,6 +155,7 @@ function loadConfig(ipcData) {
             ipcData.config.className = dataConfig.className
             ipcData.config.windowName = dataConfig.windowName
             ipcData.config.ifAutoCookieButton = dataConfig.ifAutoCookieButton
+            ipcData.config.ifAutoUpdate = dataConfig.ifAutoUpdate
         }
     });
 

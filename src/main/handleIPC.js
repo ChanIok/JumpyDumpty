@@ -23,6 +23,11 @@ const {
     mapShotCutRegister
 } = require('./map/opMap')
 
+const {
+    getLatestVersionInfo,
+    clearTemp,
+    readyToUpdate
+} = require('./controls/update')
 
 const {
     ocrArtifactDetails
@@ -65,8 +70,8 @@ function handleIPC(ipcData) {
 
     // 退出程序
     ipcMain.on('exitProcess', () => {
-        console.log('exit')
-        app.exit()
+        console.log('win-destroy')
+        ipcData.win.destroy()
     })
 
 
@@ -102,8 +107,8 @@ function handleIPC(ipcData) {
     })
 
     // 进阶设置修改
-    ipcMain.on('writeAdvancedConfig', (e, value1, value2, value3, value4, value5, value6,value7) => {
-        
+    ipcMain.on('writeAdvancedConfig', (e, value1, value2, value3, value4, value5, value6, value7) => {
+
         ipcData.ocrConfig.ifFullScreen = value3
         ipcData.ocrConfig.widthRatio = parseFloat(value4)
         ipcData.ocrConfig.heightRatio = parseFloat(value5)
@@ -116,6 +121,24 @@ function handleIPC(ipcData) {
         ipcData.config.windowName = value2
 
         writeConfig(ipcData.config)
+    })
+
+
+
+    // 获取更新相关
+    ipcMain.on('writeifAutoUpdate', (e, data) => {
+        ipcData.config.ifAutoUpdate = data
+        writeConfig(ipcData.config)
+    })
+    
+    ipcMain.on('checkUpdate', (e) => {
+        getLatestVersionInfo(ipcData.win)
+    })
+    ipcMain.on('cancelUpdate', (e) => {
+        clearTemp()
+    })
+    ipcMain.on('manmulUpdate', (e) => {
+        readyToUpdate()
     })
 }
 

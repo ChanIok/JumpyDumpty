@@ -1,16 +1,16 @@
 {
   "name": "boomboom",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "",
   "main": "./src/background.js",
-  
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
     "start": "electron .",
     "server": "webpack-dev-server",
     "dist": "electron-builder --dir --win --x64",
-    "package": "electron-packager ./ BoomBoom --out ./OutApp --version 1.0.5 --overwrite --icon=src/assets/red.ico"
+    "pack": "electron-builder",
+    "package": "electron-packager ./ BoomBoom --out ./OutApp   --overwrite --icon=src/assets/red.ico"
   },
   "build": {
     "appId": "com.genshin.jumpydumpty",
@@ -47,7 +47,7 @@
   },
   "keywords": [],
   "author": "ChanIok",
-  "license": "ISC",
+  "license": "MIT",
   "private": true,
   "gypfile": true,
   "devDependencies": {
@@ -69,9 +69,9 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
-    "bindings": "~1.2.1",
     "ant-design-vue": "^1.7.3",
     "axios": "^0.21.1",
+    "bindings": "~1.2.1",
     "crypto": "^1.0.1",
     "iohook": "^0.6.6",
     "node-addon-api": "^3.1.0",

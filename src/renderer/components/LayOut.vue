@@ -36,11 +36,10 @@
                     </a-menu-item>
                 </a-menu>
 
-                <a-button type="primary" icon="menu" id="pop-up-menu-button" size="large" @click="clickPopUpMenu"
-                    />
+                <a-button type="primary" icon="menu" id="pop-up-menu-button" size="large" @click="clickPopUpMenu" />
 
                 <transition name="slide-fade">
-                    <div id="pop-up-menu-wrapper" v-show="ifPopUpMenu" >
+                    <div id="pop-up-menu-wrapper" v-show="ifPopUpMenu">
                         <a-menu style="width: 180px" mode="vertical" @click="handlePopUpMenuClick" id="pop-up-menu">
                             <a-menu-item key="1">
                                 <a-icon type="project" class="menu-icon" />
@@ -101,6 +100,7 @@
         },
         mounted() {
             this.hidePopUpMenu()
+            this.handleIPC()
         },
         methods: {
             ClickMenu(num) {
@@ -147,19 +147,31 @@
 
             hidePopUpMenu() {
                 document.addEventListener('click', (e) => {
-                        let sp1 = document.getElementById("pop-up-menu-wrapper")
-                        let sp2 = document.getElementById("pop-up-menu-button")
-                        if (sp2) {
-                            if (!sp2.contains(event.target)&&!sp1.contains(event.target)) {
-                                this.ifPopUpMenu = false;
-                            }
+                    let sp1 = document.getElementById("pop-up-menu-wrapper")
+                    let sp2 = document.getElementById("pop-up-menu-button")
+                    if (sp2) {
+                        if (!sp2.contains(event.target) && !sp1.contains(event.target)) {
+                            this.ifPopUpMenu = false;
                         }
+                    }
 
 
-                        })
-                }
+                })
+            },
+            handleIPC() {
+                ipcRenderer.once("autoUpdateReady", () => {
+                    this.$notification['success']({
+                        message: '自动更新完成',
+                        description: '下一次启动将是最新蹦蹦炸弹',
+                        placement: 'bottomRight',
+                        duration: 4.5,
+
+                    });
+                })
             }
-        };
+        },
+
+    };
 </script>
 <style scoped>
     .first-sider-color {

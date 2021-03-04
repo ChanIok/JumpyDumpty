@@ -11,7 +11,7 @@
             <div class="hot-key-switch">
                 <a-switch @change="onAutoCookieSwitchChange" :checked="ifAutoCookieButton" />
             </div>
-            <span class="explain">登录或刷新米游社观测枢大地图(地图预览功能)时自动抓取Cookie</span>
+            <span class="explain" style="margin-top: 5px;">登录并刷新米游社观测枢大地图(地图预览功能)时自动抓取Cookie</span>
 
 
             <span class="note">手动设置Cookie</span>
@@ -23,6 +23,37 @@
             </div>
             <span class="explain">Cookie可自动开启功能自动获取。手动获取方法可参考：https://github.com/yinghualuowu/GenshinDailyHelper</span>
             <a-divider />
+
+
+            <span class="title">自动更新</span>
+
+
+            <span class="note">使程序保持最新状态</span>
+            <div class="update-auto-switch">
+                <a-switch @change="onAutoUpdateSwitchChange" :checked="ifAutoUpdateSwitch" />
+            </div>
+            <span class="explain" style="margin-top: 5px;">注意：该功能从GitHub上获取更新文件，不一定稳定</span>
+
+            <div id="check-update-button">
+                <a-button type="primary" @click="checkUpdate">
+                    检测更新
+                </a-button>
+            </div>
+            <transition name="slide-fade">
+                <div id="updata-status" v-if="ifUpdating">
+                    <a-spin v-if="!ifToUpdate&&!ifChoosedUpdate" style="margin-right: 10px;" />
+                    <span id="updata-status-note">{{updateStatus}}</span>
+                    <span id="if-to-update" v-if="ifToUpdate&&!ifChoosedUpdate">
+                        <a-button type="primary" @click="manualUpdate">
+                            确定
+                        </a-button>
+                        <a-button @click="cancelUpdate">取消</a-button>
+                    </span>
+
+                </div>
+            </transition>
+            <a-divider />
+
 
             <span class="title">进阶设置</span>
             <span class="explain" style="margin-bottom: 15px;">普通用户请勿修改此处设置！</span>
@@ -76,7 +107,7 @@
             <a-divider />
 
             <span class="title" style="margin-top: 10px;">关于</span>
-            <span class="note">本程序开源且免费，项目地址：https://github.com/ChanIok/JumpyDumpty</span>
+            <span class="note">本程序开源且免费，当前版本{{appVersion}}，项目地址：https://github.com/ChanIok/JumpyDumpty</span>
             <span class="note">问题可直接在GitHub或NGA反馈：https://bbs.nga.cn/read.php?tid=25647353</span>
             <span class="explain">如果觉得有用，可以给个star，谢谢你</span>
 
@@ -95,6 +126,7 @@
     export default {
         data() {
             return {
+                appVersion: '',
                 cookieValue: '',
                 ifAutoCookieButton: false,
                 className: 'UnityWndClass',
@@ -103,12 +135,18 @@
                 widthRatio: 0.2450,
                 heightRatio: 0.5100,
                 xPosRatio: 0.6800,
-                yPosRatio: 0.1100
+                yPosRatio: 0.1100,
+                ifAutoUpdateSwitch: true,
+                ifUpdating: false,
+                updateStatus: '正在获取新版本的信息',
+                ifToUpdate: false,
+                ifChoosedUpdate: false
             }
         },
         mounted() {
             this.getConfig()
             this.readCookie()
+            this.handleIPC()
         },
         components: {
             myTitle
@@ -130,6 +168,12 @@
                         } else {
                             this.ifAutoCookieButton = false
                         }
+                        if (res.data.ifAutoUpdate) {
+                            // 按钮打开
+                            this.ifAutoUpdateSwitch = true
+                        } else {
+                            this.ifAutoUpdateSwitch = false
+                        }
 
                         this.className = res.data.className
                         this.windowName = res.data.windowName
@@ -148,6 +192,12 @@
                         this.yPosRatio = res.data.yPosRatio
                     }
                 })
+                axios.get('../../package.json').then(res => {
+                    if (res.status === 200) {
+                        console.log('package',res.data)
+                        this.appVersion = res.data.version
+                    }
+                })
             },
             onAutoCookieSwitchChange(checked) {
                 if (checked) {
@@ -156,6 +206,14 @@
                     this.ifAutoCookieButton = false
                 }
                 ipcRenderer.send("writeifAutoCookie", this.ifAutoCookieButton);
+            },
+            onAutoUpdateSwitchChange(checked) {
+                if (checked) {
+                    this.ifAutoUpdateSwitch = true
+                } else {
+                    this.ifAutoUpdateSwitch = false
+                }
+                ipcRenderer.send("writeifAutoUpdate", this.ifAutoUpdateSwitch);
             },
             saveCookie() {
                 ipcRenderer.send("writeCookie", this.cookieValue);
@@ -188,8 +246,49 @@
                     .heightRatio, this
                     .xPosRatio, this
                     .yPosRatio)
-            }
+            },
+            checkUpdate() {
+                if (!this.ifToUpdate && !this.ifChoosedUpdate) {
+                    this.ifUpdating = true
+                    ipcRenderer.send("checkUpdate")
+                    ipcRenderer.on("getVersionFinished", (e, res, latestVersion, currentVersion) => {
+                        if (res == "success-version") {
+                            if (latestVersion > currentVersion) {
+                                this.updateStatus = "最新的蹦蹦炸弹版本为：" + latestVersion + "，而现在的这个的还是：" +
+                                    currentVersion +
+                                    "，正在获取更新包..."
+                            } else {
+                                this.updateStatus = "已经是最新版的蹦蹦炸弹啦：" + latestVersion
+                            }
+                        } else if (res == "success-ready") {
+                            this.ifToUpdate = true
+                            this.updateStatus = "新版蹦蹦炸弹部署完毕，是否安装呢？"
+                        } else if (res == "error-get") {
+                            this.updateStatus = "服务器炸了，获取不到信息，建议还是去云盘下"
+                        } else if (res == "error-hash") {
+                            this.updateStatus = "服务器有问题，获取的文件不对！建议还是去云盘下"
+                        }
 
+                    })
+                }
+
+            },
+            manualUpdate() {
+                ipcRenderer.send("manualUpdate")
+                this.ifToUpdate = false
+                this.ifChoosedUpdate = true
+                this.updateStatus = "准备工作完成！下一次启动将会是全新的蹦蹦炸弹~"
+            },
+            cancelUpdate() {
+                ipcRenderer.send("cancelUpdate")
+                this.ifUpdating = false
+                this.updateStatus = '正在获取新版本的信息'
+                this.ifToUpdate = false
+                this.ifChoosedUpdate = false
+            },
+            handleIPC() {
+                ipcRenderer.removeAllListeners('getVersionFinished')
+            }
         }
     };
 </script>
@@ -274,5 +373,22 @@
         position: absolute;
         left: calc(200px + 35%);
         bottom: 6px;
+    }
+
+    #updata-status {
+        margin-top: 15px;
+    }
+
+    .slide-fade-enter-active {
+        transition: all .2s ease;
+    }
+
+    .slide-fade-leave-active {
+        transition: all .2s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+
+    .slide-fade-enter,
+    .slide-fade-leave-to {
+        opacity: 0;
     }
 </style>
