@@ -174,21 +174,11 @@ function getServer(uid) {
 
 // 获取签名
 function getDS() {
-    let n
-    if (mhyVersion == "2.1.0") {
-        n = crypto.createHash('md5').update(mhyVersion).digest("hex")
-    } else if (mhyVersion == "2.2.1") {
-        n = "cx2y9z9a29tfqvr1qsq6c7yz99b5jsqt"
-    } else {
-        mhyVersion = "2.2.1"
-        n = "cx2y9z9a29tfqvr1qsq6c7yz99b5jsqt"
-    }
+    // v2.3.0-web @povsister & @journey-ad
+    let n= 'h8w582wxwgqvahcdkpvdhbh2w9casgfl'
     let i = Math.round(((new Date().getTime()) / 1000)).toString()
-
-
     let r = randomString(6)
     let c = crypto.createHash('md5').update("salt=" + n + "&t=" + i + "&r=" + r).digest("hex")
-    // console.log(i + "," + r + "," + c)
     return (i + "," + r + "," + c)
 }
 

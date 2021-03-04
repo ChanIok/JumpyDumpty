@@ -6,7 +6,7 @@ Electron + Vue + AntDesign
 
 新手尝试，还有很多不足的地方，如果觉得有用求给个star，谢谢你
 
-因为electron比较大，不是很建议太过频繁更新，目前每次换新版本后数据和设置需要重新设置
+自动更新可能不是特别稳定
 
 ## 功能：
 
@@ -19,16 +19,11 @@ Electron + Vue + AntDesign
 
   呼出地图窗口后，由于原神从游戏切换其他窗口默认会最小化，隐藏地图窗口时调用了 windows api 的函数重新激活原神窗口，从而实现近似于游戏地图的体验
 
-* ~~角色查询~~
+* 角色查询
 
-  ~~刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie~~
+  刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie
 
-  ~~查询的 API 和方法源自于 GitHub 上的各位大佬~~
-
-  已失效，API和DS算法来自[Womsxd](https://github.com/Womsxd/YuanShen_User_Info)和[Steesha](https://github.com/Steesha)
-  
-  我没有反编译的能力，可能该程序传播有点广....
-  对两位大佬和各位说声对不起！！
+  [此处感谢genshin-impact-helper]https://github.com/y1ndan/genshin-impact-helper
 
 * 圣遗物 OCR 导出
 
