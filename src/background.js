@@ -155,11 +155,11 @@ function createWindow() {
                 // app.quit()
                 // app.exit()
             }
-        }, //直接强制退出
+        }, //退出
     ])
     tray.setToolTip('这是一个蹦蹦炸弹')
     tray.setContextMenu(contextMenu)
-    tray.on('double-click', () => { //我们这里模拟桌面程序点击通知区图标实现打开关闭应用的功能
+    tray.on('double-click', () => { //打开关闭应用
         win.isVisible() ? win.hide() : win.show()
         win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true);
     })

@@ -7,6 +7,7 @@ import 'ant-design-vue/dist/antd.less' // 引入Ant Design Vue样式
 import App from './renderer/App.vue'
 // 导入App组件
 
+
 import router from './renderer/router/router.js'
 // 导入路由
 
@@ -23,5 +24,3 @@ new Vue({
     },
     template:'<App/>'
 })
-
-// 挂载App组件

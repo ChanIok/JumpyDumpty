@@ -15,8 +15,8 @@ let floatingWin
 
 function createFloatingWindow() {
     floatingWin = new BrowserWindow({
-        // width: 860, //悬浮窗口的宽度
-        // height: 580, //悬浮窗口的高度
+        // width: 860, 
+        // height: 580, 
         width: 360, //悬浮窗口的宽度
         height: 250, //悬浮窗口的高度
         type: 'toolbar',
@@ -25,7 +25,6 @@ function createFloatingWindow() {
         resizable: true, //禁止窗口大小缩放
         webPreferences: {
             // devTools: false //关闭调试
-
             nodeIntegration: true
 
         },
@@ -43,10 +42,9 @@ function createFloatingWindow() {
             floatingWin.setPosition(size.width - winSize[0], size.height - winSize[1]);
         }, 10);
     }
-    // console.log(winSize)
 
-
-    floatingWin.loadFile('./src/renderer/components/coms/index.html');
+    // floatingWin.loadFile('./src/renderer/components/coms/index.html')
+    floatingWin.loadFile('./src/renderer/components/coms/floatingwin/float-index.html')
     floatingWin.show()
 
     floatingWin.on('close', () => {

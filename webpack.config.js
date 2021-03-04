@@ -8,13 +8,17 @@ module.exports = {
     mode: 'development',
     // 打包入口
     target: 'electron-renderer',
-    entry: './src/main.js',
+    // entry: './src/main.js',
+    entry: {
+        app: './src/main.js',
+        floatingWin: './src/renderer/components/coms/floatingwin/floatMain.js',
+    },
     devServer: {
         contentBase: './src/dist',
         open: false,
     },
     output: {
-        filename: 'bundle.js',
+        filename: '[name].js',
         // 在当前目录的绝对路径下的dist目录
         path: path.resolve(__dirname, 'src/dist')
     },
@@ -48,7 +52,6 @@ module.exports = {
                     },
                 },
             }],
-            // ...other rules
         }]
     },
     // 插件
