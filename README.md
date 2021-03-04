@@ -66,6 +66,11 @@ https://wws.lanzous.com/b01zxfq8j
 
 ## 更新日志：
 
+
+### v1.1.0/v1.1.1
+
+- 增加了自动更新功能，实现方法有点辣鸡，详见[嘟嘟可](https://github.com/ChanIok/Dodoco/)
+  
 ### v1.0.9.1
 
 - 增加了OCR全屏截图模式
