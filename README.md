@@ -54,16 +54,20 @@ Electron + Vue + AntDesign
 
 ## 使用：
 
-v1.0.9 已打包，解压直接运行：  
+v1.1.2 已打包，解压直接运行：  
 https://wws.lanzous.com/b01zxfq8j
 密码:boom
 
 ## 更新日志：
 
+### v1.1.2
 
+- 修复了用户查询失败
+- 部分代码重构
+  
 ### v1.1.0/v1.1.1
 
-- 增加了自动更新功能，实现方法有点辣鸡，详见[嘟嘟可](https://github.com/ChanIok/Dodoco/)
+- 增加了自动更新功能，实现方法有点辣鸡，详见[嘟嘟可：](https://github.com/ChanIok/Dodoco/)
   
 ### v1.0.9.1
 
