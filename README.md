@@ -19,17 +19,15 @@ Electron + Vue + AntDesign
 
   呼出地图窗口后，由于原神从游戏切换其他窗口默认会最小化，隐藏地图窗口时调用了 windows api 的函数重新激活原神窗口，从而实现近似于游戏地图的体验
 
-* 角色查询
+* ~~角色查询~~
 
-  刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie
+  ~~刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie~~
 
-  查询的 API 和方法源自于 GitHub 上的各位大佬
+  ~~查询的 API 和方法源自于 GitHub 上的各位大佬~~
 
-  使用方法：
-
-  - 运行程序，在设置界面开启“自动抓取Cookie”
-  - 切换快捷地图功能，打开地图预览，登录米游社
-  - 通过切换来刷新该页面，消息提示成功即可直接在角色查询界面输入UID查询
+  已失效，API和DS算法来自[Womsxd](https://github.com/Womsxd/YuanShen_User_Info)[Steesha](https://github.com/Steesha)
+  我没有反编译的能力，可能该程序传播有点广....
+  对两位大佬和各位说声对不起！！
 
 * 圣遗物 OCR 导出
 
