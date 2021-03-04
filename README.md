@@ -25,7 +25,8 @@ Electron + Vue + AntDesign
 
   ~~查询的 API 和方法源自于 GitHub 上的各位大佬~~
 
-  已失效，API和DS算法来自[Womsxd](https://github.com/Womsxd/YuanShen_User_Info)[Steesha](https://github.com/Steesha)
+  已失效，API和DS算法来自[Womsxd](https://github.com/Womsxd/YuanShen_User_Info)和[Steesha](https://github.com/Steesha)
+  
   我没有反编译的能力，可能该程序传播有点广....
   对两位大佬和各位说声对不起！！
 
