@@ -41,9 +41,9 @@
             </div>
             <transition name="slide-fade">
                 <div id="updata-status" v-if="ifUpdating">
-                    <a-spin v-if="!ifToUpdate&&!ifChoosedUpdate" style="margin-right: 10px;" />
+                    <a-spin v-if="ifLoading" style="margin-right: 10px;" />
                     <span id="updata-status-note">{{updateStatus}}</span>
-                    <span id="if-to-update" v-if="ifToUpdate&&!ifChoosedUpdate">
+                    <span id="if-to-update" v-if="!ifLoading&&!ifChoosedUpdate">
                         <a-button type="primary" @click="manualUpdate">
                             确定
                         </a-button>
@@ -139,7 +139,7 @@
                 ifAutoUpdateSwitch: true,
                 ifUpdating: false,
                 updateStatus: '正在获取新版本的信息',
-                ifToUpdate: false,
+                ifLoading: false,
                 ifChoosedUpdate: false
             }
         },
@@ -194,7 +194,7 @@
                 })
                 axios.get('../../package.json').then(res => {
                     if (res.status === 200) {
-                        console.log('package',res.data)
+                        console.log('package', res.data)
                         this.appVersion = res.data.version
                     }
                 })
@@ -248,8 +248,9 @@
                     .yPosRatio)
             },
             checkUpdate() {
-                if (!this.ifToUpdate && !this.ifChoosedUpdate) {
+                if (!this.ifLoading && !this.ifChoosedUpdate) {
                     this.ifUpdating = true
+                    this.ifLoading = true
                     ipcRenderer.send("checkUpdate")
                     ipcRenderer.on("getVersionFinished", (e, res, latestVersion, currentVersion) => {
                         if (res == "success-version") {
@@ -258,10 +259,11 @@
                                     currentVersion +
                                     "，正在获取更新包..."
                             } else {
+                                this.ifLoading = false
                                 this.updateStatus = "已经是最新版的蹦蹦炸弹啦：" + currentVersion
                             }
                         } else if (res == "success-ready") {
-                            this.ifToUpdate = true
+                            this.ifLoading=false
                             this.updateStatus = "新版蹦蹦炸弹部署完毕，是否安装呢？"
                         } else if (res == "error-get") {
                             this.updateStatus = "服务器炸了，获取不到信息，建议还是去云盘下"
@@ -275,7 +277,7 @@
             },
             manualUpdate() {
                 ipcRenderer.send("manualUpdate")
-                this.ifToUpdate = false
+                this.ifLoading = false
                 this.ifChoosedUpdate = true
                 this.updateStatus = "准备工作完成！下一次启动将会是全新的蹦蹦炸弹~"
             },
@@ -283,7 +285,7 @@
                 ipcRenderer.send("cancelUpdate")
                 this.ifUpdating = false
                 this.updateStatus = '正在获取新版本的信息'
-                this.ifToUpdate = false
+                this.ifLoading = false
                 this.ifChoosedUpdate = false
             },
             handleIPC() {

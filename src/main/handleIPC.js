@@ -137,7 +137,8 @@ function handleIPC(ipcData) {
     ipcMain.on('cancelUpdate', (e) => {
         clearTemp()
     })
-    ipcMain.on('manmulUpdate', (e) => {
+    ipcMain.on('manualUpdate', (e) => {
+        console.log('IPC-manualUpdate')
         readyToUpdate()
     })
 }
