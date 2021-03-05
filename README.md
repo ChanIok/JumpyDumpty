@@ -23,7 +23,7 @@ Electron + Vue + AntDesign
 
   刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie
 
-  [此处感谢genshin-impact-helper]https://github.com/y1ndan/genshin-impact-helper
+  [此处感谢genshin-impact-helper](https://github.com/y1ndan/genshin-impact-helper)
 
 * 圣遗物 OCR 导出
 
@@ -54,15 +54,20 @@ Electron + Vue + AntDesign
 
 ## 使用：
 
-v1.1.2 已打包，解压直接运行：  
+v1.1.3 已打包，解压直接运行：  
 https://wws.lanzous.com/b01zxfq8j
 密码:boom
 
 ## 更新日志：
 
+### v1.1.3
+
+- 修复了用户查询的深渊和角色详情查询失败的问题
+- 修复了手动检测更新下安装失败的问题
+  
 ### v1.1.2
 
-- 修复了用户查询失败
+- 修复了用户查询失败的问题
 - 部分代码重构
   
 ### v1.1.0/v1.1.1

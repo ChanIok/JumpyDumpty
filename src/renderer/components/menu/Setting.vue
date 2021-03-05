@@ -260,6 +260,7 @@
                                     "，正在获取更新包..."
                             } else {
                                 this.ifLoading = false
+                                this.ifChoosedUpdate = true
                                 this.updateStatus = "已经是最新版的蹦蹦炸弹啦：" + currentVersion
                             }
                         } else if (res == "success-ready") {
