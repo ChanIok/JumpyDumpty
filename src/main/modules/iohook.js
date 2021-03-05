@@ -1,8 +1,4 @@
 const ioHook = require('iohook')
-
-// const addonCatch = require('../build/Release/ArtifactsCatch.node')
-
-
 const {
     globalShortcut,
     Notification
@@ -20,38 +16,11 @@ const {
 } = require('./floatingWin')
 
 
-// const { set } = require('vue/types/umd')
-
-
 let ifOCRHotKey = false
 let ifOCRing = false
-let ifInit = false
 let ifMouseClick = false
 
-// 显示系统通知
-function showNotification(res) {
-    if (res == "open") {
-        let notification = new Notification({
-            title: '已开启热键',
-            body: '请点击鼠标以抓取圣遗物'
-        })
-        // notification.show()
-        createFloatingWindow()
-        setTimeout(() => {
-            notification.close()
-        }, 1200);
-    } else if (res == "close") {
-        let notification = new Notification({
-            title: '已关闭热键',
-            body: "可导出圣遗物"
-        })
-        notification.show()
-        closeFloatingWindow()
-        setTimeout(() => {
-            notification.close()
-        }, 3500);
-    }
-}
+
 
 function ocrHotKeyRegister(ipcData) {
     // 注册热键
@@ -84,7 +53,6 @@ function ocrHotKeyRegister(ipcData) {
             ioHook.on('mousedrag', () => {
                 ifMouseClick = false
             });
-
             console.log("start-ocr")
             ifOCRHotKey = true
             showNotification("open")
@@ -96,14 +64,38 @@ function ocrHotKeyRegister(ipcData) {
 
 }
 
+// 显示系统通知
+function showNotification(res) {
+    if (res == "open") {
+        let notification = new Notification({
+            title: '已开启热键',
+            body: '请点击鼠标以抓取圣遗物'
+        })
+        // notification.show()
+        createFloatingWindow()
+        setTimeout(() => {
+            notification.close()
+        }, 1200);
+    } else if (res == "close") {
+        let notification = new Notification({
+            title: '已关闭热键',
+            body: "可导出圣遗物"
+        })
+        notification.show()
+        closeFloatingWindow()
+        setTimeout(() => {
+            notification.close()
+        }, 3500);
+    }
+}
 
 
+// 单步的OCR操作
 function ocrArtifac(ipcData) {
     ocrArtifactDetails(ipcData, true)
 }
 
-
-
+// iohook相关
 function ioStart() {
     ioHook.start()
 }
@@ -113,10 +105,12 @@ function ioStop() {
 }
 
 function ioExit() {
-
     ioHook.unload()
     ioHook.stop()
 }
+
+
+
 module.exports = {
     ioExit,
     ocrHotKeyRegister

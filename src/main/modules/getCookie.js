@@ -15,8 +15,6 @@ function getCookie(callback) {
         func = function () {};
     }
     session.defaultSession.webRequest.onSendHeaders(filter, (details) => {
-        // let reqHeaders = details.requestHeaders
-
         func(details.requestHeaders)
 
     })
@@ -27,7 +25,7 @@ function writeCookie(data, callback) {
     let writeData = {
         cookie: data,
     }
-    fs.writeFile(path.resolve(__dirname, '../../../../data/cookie.json'), JSON.stringify(writeData, null, 4), (err) => {
+    fs.writeFile(path.resolve(__dirname, '../../../../../data/cookie.json'), JSON.stringify(writeData, null, 4), (err) => {
         if (err) {
             throw err
         } else {

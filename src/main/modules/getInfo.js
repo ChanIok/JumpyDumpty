@@ -1,5 +1,4 @@
 const axios = require('axios')
-// const qs = require('querystring')
 const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto')
@@ -10,16 +9,11 @@ const {
 } = require('./opInfoData')
 
 
-
 let cookie = ""
 
-
-
-
-
-
+// 读取Cookie
 function readCookie(callback){
-    fs.readFile(path.resolve(__dirname, '../../../../data/cookie.json'), function (err, data) {
+    fs.readFile(path.resolve(__dirname, '../../../../../data/cookie.json'), function (err, data) {
         if (err) {
             // throw err;
         } else {
@@ -29,7 +23,6 @@ function readCookie(callback){
             if(callback){
                 callback()
             }
-            // return cookie
         }
     });
 }
@@ -102,9 +95,6 @@ function getSpiralAbyssInfo(uid,callback) {
 
 
 
-
-
-
 // 获取角色详情
 function getCharactersInfo(uid, characterIDs,callback) {
     roleInfoServer = getServer(uid)
@@ -137,8 +127,6 @@ function getCharactersInfo(uid, characterIDs,callback) {
         console.log('err')
     })
 }
-
-
 
 
 // 将用户的所有角色id导出到数组，再获取该数组的所有角色详情

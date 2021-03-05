@@ -1,50 +1,33 @@
 const {
     app,
     BrowserWindow,
-    ipcMain,
     Tray,
     Menu,
-    autoUpdater,
 } = require('electron')
 
 const path = require('path')
 const gotTheLock = app.requestSingleInstanceLock()
 
-
 const {
     initConfig,
-    writeConfig,
-    writeOcrConfig,
-} = require('./main/opConfig')
+} = require('./main/controls/opConfig')
 
-const {
-    getUserInfo
-} = require('./main/getInfo')
 
 const {
     handleIPC
-} = require('./main/handleIPC')
-
-const {
-    getCookie,
-    writeCookie
-} = require('./main/getCookie')
-
-const {
-    getAccessToken,
-    ocrArtifactDetails,
-    artifactsReset,
-    saveAccessToken,
-    expoetToClicpBoard
-} = require('./main/ocr')
-
-const {
-    ocrHotKeyRegister
-} = require('./main/iohook')
+} = require('./main/controls/handleIPC')
 
 const {
     runAutoUpdate
 } = require('./main/controls/update')
+
+const {
+    createTray
+} = require('./main/controls/tray')
+
+const {
+    ocrHotKeyRegister
+} = require('./main/modules/iohook')
 
 let win
 let willQuitApp = false
@@ -72,50 +55,6 @@ let ipcData = {
     }
 }
 
-let config = {}
-
-function handleIPCmain() {
-    ipcMain.on('getInfo', (e, data) => {
-        getUserInfo(data, () => {
-            e.reply('getInfoFinished')
-        })
-    })
-
-    ipcMain.on('writeCookie', (e, data) => {
-        writeCookie(data)
-    })
-    ipcMain.on('getCookie', (e) => {
-        getCookie(() => {
-            e.reply('getCookieFinished')
-        })
-    })
-
-    ipcMain.on('writeApi', (e, value) => {
-        console.log("ready-to-write-api")
-        ipcData.ocrConfig.api = value
-        writeOcrConfig(ipcData.ocrConfig)
-    })
-    ipcMain.on('getAccessToken', (e, value1, value2) => {
-        getAccessToken(value1, value2, () => {
-            e.reply("getAccessTokenFinished")
-        })
-    })
-    ipcMain.on('saveAccessToken', (e, value) => {
-        console.log("save-access-token")
-        saveAccessToken(value)
-    })
-    ipcMain.on('artifactsReset', (e) => {
-        artifactsReset(() => {
-            e.reply("artifactsResetFinished")
-        })
-    })
-    ipcMain.on('expoetToClicpBoard', (e) => {
-        expoetToClicpBoard(() => {
-            e.reply("expoetToClicpBoardFinished")
-        })
-    })
-}
-
 
 function createWindow() {
     // 创建浏览器窗口
@@ -140,44 +79,20 @@ function createWindow() {
     })
 
     //创建系统通知区菜单
-    tray = new Tray(path.resolve(__dirname, './assets/logo.ico'));
-    const contextMenu = Menu.buildFromTemplate([{
-            label: '显示界面',
-            click: () => {
-                win.show()
-            }
-        }, {
-            type: 'separator'
-        }, {
-            label: '退出',
-            click: () => {
-                win.destroy()
-                // app.quit()
-                // app.exit()
-            }
-        }, //退出
-    ])
-    tray.setToolTip('这是一个蹦蹦炸弹')
-    tray.setContextMenu(contextMenu)
-    tray.on('double-click', () => { //打开关闭应用
-        win.isVisible() ? win.hide() : win.show()
-        win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true);
-    })
+    createTray()
 
     // win.loadURL("http://localhost:8080")
     win.loadFile('./src/renderer/index.html')
-    ipcData.contents = win.webContents
     ipcData.win = win
 }
 
 
-
+// 防止多开
 if (!gotTheLock) {
     app.quit()
 } else {
     app.on('second-instance', () => {
         //当运行第二个实例时,将会聚焦到win这个窗口
-
         if (win.isMinimized()) {
             win.restore()
         } else if (!win.isVisible()) {
@@ -188,9 +103,7 @@ if (!gotTheLock) {
     app.on('ready', () => {
         createWindow()
         initConfig(ipcData) //加载设置
-        handleIPCmain()
         handleIPC(ipcData)
-
 
         setTimeout(() => {
             if(ipcData.config.ifAutoUpdate){
@@ -206,15 +119,10 @@ if (!gotTheLock) {
 }
 
 
-app.whenReady().then(() => {})
-
-
 app.on('before-quit', () => {
     ioExit()
     console.log("before-quit")
 });
-
-
 
 app.on('activate', () => {
     if (win === null) {

@@ -1,10 +1,7 @@
 const {
-    app,
     ipcMain,
     globalShortcut
 } = require('electron')
-
-
 
 const {
     initConfig,
@@ -15,28 +12,83 @@ const {
 } = require('./opConfig')
 const {
     ocrHotKeyRegister
-} = require('./iohook')
+} = require('../modules/iohook')
 const {
     reloadMap,
     createMap,
     destroyMap,
     mapShotCutRegister
-} = require('./map/opMap')
+} = require('../modules/opMap')
 
 const {
     getLatestVersionInfo,
     clearTemp,
     readyToUpdate
-} = require('./controls/update')
+} = require('./update')
 
 const {
-    ocrArtifactDetails
-} = require('./ocr')
+    getCookie,
+    writeCookie
+} = require('../modules/getCookie')
 
+const {
+    getAccessToken,
+    ocrArtifactDetails,
+    artifactsReset,
+    saveAccessToken,
+    expoetToClicpBoard
+} = require('../modules/ocr')
 
 
 
 function handleIPC(ipcData) {
+    // 用户查询
+    ipcMain.on('getInfo', (e, data) => {
+        getUserInfo(data, () => {
+            e.reply('getInfoFinished')
+        })
+    })
+
+    // Cookie相关
+    ipcMain.on('writeCookie', (e, data) => {
+        writeCookie(data)
+    })
+    ipcMain.on('getCookie', (e) => {
+        getCookie(() => {
+            e.reply('getCookieFinished')
+        })
+    })
+
+    // 写入OCR的API
+    ipcMain.on('writeApi', (e, value) => {
+        console.log("ready-to-write-api")
+        ipcData.ocrConfig.api = value
+        writeOcrConfig(ipcData.ocrConfig)
+    })
+    // 获取AccessToken
+    ipcMain.on('getAccessToken', (e, value1, value2) => {
+        getAccessToken(value1, value2, () => {
+            e.reply("getAccessTokenFinished")
+        })
+    })
+    // 保持AccessToken
+    ipcMain.on('saveAccessToken', (e, value) => {
+        console.log("save-access-token")
+        saveAccessToken(value)
+    })
+
+    // 清空圣遗物
+    ipcMain.on('artifactsReset', (e) => {
+        artifactsReset(() => {
+            e.reply("artifactsResetFinished")
+        })
+    })
+    // 导出圣遗物到剪贴板
+    ipcMain.on('expoetToClicpBoard', (e) => {
+        expoetToClicpBoard(() => {
+            e.reply("expoetToClicpBoardFinished")
+        })
+    })
 
     // OCR热键更改
     ipcMain.on('writeOCRHotKey', (e, data) => {
@@ -44,7 +96,6 @@ function handleIPC(ipcData) {
         ipcData.ocrConfig.hotKey = data
         writeOcrConfig(ipcData.ocrConfig)
         ocrHotKeyRegister(ipcData)
-        // ipcData.contents.send("ocrHotKeyConflict")
     })
 
     // OCR去重更改
@@ -130,7 +181,7 @@ function handleIPC(ipcData) {
         ipcData.config.ifAutoUpdate = data
         writeConfig(ipcData.config)
     })
-    
+
     ipcMain.on('checkUpdate', (e) => {
         getLatestVersionInfo(ipcData.win)
     })

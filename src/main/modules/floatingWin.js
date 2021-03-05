@@ -1,18 +1,11 @@
 const {
     BrowserWindow,
-    ipcMain,
     screen,
-    Menu,
-    shell,
-    app,
-    webContents
 } = require('electron')
 
 let floatingWin
 
-
-
-
+// 创建OCR的浮窗
 function createFloatingWindow() {
     floatingWin = new BrowserWindow({
         // width: 860, 
@@ -43,7 +36,6 @@ function createFloatingWindow() {
         }, 10);
     }
 
-    // floatingWin.loadFile('./src/renderer/components/coms/index.html')
     floatingWin.loadFile('./src/renderer/components/coms/floatingwin/float-index.html')
     floatingWin.show()
 
@@ -55,16 +47,16 @@ function createFloatingWindow() {
 
 ;
 
-
-
+// 向浮窗发送消息
 function sendMsgToFloatingWin(data) {
-    // console.log("MSG",floatingWin.webContents)
     floatingWin.webContents.send("OCRDetailNotification", data)
 }
 
+// 关闭浮窗
 function closeFloatingWindow(){
     floatingWin.destroy()
 }
+
 module.exports = {
     sendMsgToFloatingWin,
     createFloatingWindow,

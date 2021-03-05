@@ -6,7 +6,7 @@ Electron + Vue + AntDesign
 
 新手尝试，还有很多不足的地方，如果觉得有用求给个star，谢谢你
 
-自动更新可能不是特别稳定
+自动更新可能不是特别稳定，1.1.0以后的版本都能自动更新
 
 ## 功能：
 
@@ -23,7 +23,7 @@ Electron + Vue + AntDesign
 
   刷新观测枢地图时，用 Electron 的 webRequest 功能拦截 headers，获取 cookie
 
-  [此处感谢genshin-impact-helper](https://github.com/y1ndan/genshin-impact-helper)
+  此处感谢[genshin-impact-helper](https://github.com/y1ndan/genshin-impact-helper)
 
 * 圣遗物 OCR 导出
 
@@ -76,7 +76,7 @@ https://wws.lanzous.com/b01zxfq8j
   
 ### v1.1.0/v1.1.1
 
-- 增加了自动更新功能，实现方法有点辣鸡，详见[嘟嘟可：](https://github.com/ChanIok/Dodoco/)
+- 增加了自动更新功能，实现方法有点辣鸡，详见：[嘟嘟可](https://github.com/ChanIok/Dodoco/)
   
 ### v1.0.9.1
 

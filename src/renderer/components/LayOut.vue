@@ -106,7 +106,7 @@
                         message: '自动更新完成',
                         description: '下一次启动将是最新蹦蹦炸弹',
                         placement: 'bottomRight',
-                        duration: 4.5,
+                        duration: 0,
 
                     });
                 })

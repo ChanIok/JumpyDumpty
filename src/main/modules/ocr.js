@@ -19,7 +19,7 @@ const {
     sendMsgToFloatingWin
 } = require('./floatingWin');
 
-const addonShot = require('../build/Release/ScreenShot.node');
+const addonShot = require('../../build/Release/ScreenShot.node');
 
 let artifactNotification = {
     result: '',
@@ -28,7 +28,7 @@ let artifactNotification = {
     normalTags: []
 }
 
-// 显示系统通知
+// 显示系统通知,没什么用了
 function showNotification(res, msg) {
     if (res == "success") {
         let notification = new Notification({
@@ -66,59 +66,56 @@ function getAccessToken(value1, value2, callback) {
     }, function (res) {
         // 在标准输出中查看运行结果
         // 写入文件
-        res.pipe(fs.createWriteStream(path.resolve(__dirname, '../../../../config/baiduToken.json')));
-
+        res.pipe(fs.createWriteStream(path.resolve(__dirname, '../../../../../config/baiduToken.json')));
         callback()
     });
 }
 
+// 将获取的获取AccessToken单独保存
 function saveAccessToken(value) {
-    fs.readFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), function (err, data) {
+    fs.readFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), function (err, data) {
         if (err) {
             // throw err;
             // 文件不存在
             let tokenData = {
                 access_token: value
             }
-            fs.writeFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), JSON.stringify(tokenData, null, 4), (err) => {
+            fs.writeFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), JSON.stringify(tokenData, null, 4), (err) => {
                 if (err) throw err
             })
         } else {
             let tokenData = JSON.parse(data.toString())
             tokenData.access_token = value
-            fs.writeFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), JSON.stringify(tokenData, null, 4), (err) => {
+            fs.writeFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), JSON.stringify(tokenData, null, 4), (err) => {
                 if (err) throw err
             })
         }
-
     })
 }
 
 function ocrArtifactDetails(ipcData, ifShow, callback) {
 
-
     // 截图
-    addonShot.shot(ipcData.config.className, ipcData.config.windowName, ipcData.ocrConfig.widthRatio, ipcData.ocrConfig.heightRatio, ipcData.ocrConfig.xPosRatio, ipcData.ocrConfig.yPosRatio,ipcData.ocrConfig.ifFullScreen==true?1:0)
-
+    addonShot.shot(ipcData.config.className, ipcData.config.windowName, ipcData.ocrConfig.widthRatio, ipcData.ocrConfig.heightRatio, ipcData.ocrConfig.xPosRatio, ipcData.ocrConfig.yPosRatio, ipcData.ocrConfig.ifFullScreen == true ? 1 : 0)
+    // 读取剪贴板的图片
     let img = clipboard.readImage()
     if (!img.isEmpty()) {
         let imgUrl = img.toDataURL()
-
         fs.readFile(path.resolve(__dirname, '../../../../config/ocrConfig.json'), function (err, resAPI) {
             if (err) {
                 throw err
             } else {
                 let api = JSON.parse(resAPI.toString()).api
-                // console.log("api:", api)
-                fs.writeFile(path.resolve(__dirname, '../../../../data/artifact.jpg'), Buffer.from(imgUrl.replace('data:image/png;base64,', ''), 'base64'), (err) => {
+                // 将图片写入本地
+                fs.writeFile(path.resolve(__dirname, '../../../../../data/artifact.jpg'), Buffer.from(imgUrl.replace('data:image/png;base64,', ''), 'base64'), (err) => {
                     console.log('save-img-success')
                     fs.readFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), function (err, resToken) {
                         if (err) {
                             throw err
                         } else {
                             let access_token = JSON.parse(resToken.toString()).access_token
-                            // console.log("token", access_token)
-                            fs.readFile(path.resolve(__dirname, '../../../../data/artifact.jpg'), function (err, data) {
+                            // 再读
+                            fs.readFile(path.resolve(__dirname, '../../../../../data/artifact.jpg'), function (err, data) {
                                 if (err) {
                                     throw err
                                 } else {
@@ -135,7 +132,6 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
                                         }
                                     }).then(function (response) {
                                         // console.log(response.data)
-
                                         handleOcrData(response.data, ifShow, callback)
                                     }, function (err) {
                                         if (ifShow) {
@@ -152,28 +148,22 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
                 })
             }
         })
-        // console.log(imgUrl)
     }
-
 }
 
+// 对百度OCR的返回数据进行提取
 function handleOcrData(ocrData, ifShow, callback) {
-    // console.log("enter")
     let artifactData = {
         mainTag: {},
         normalTags: []
     }
     artifactNotification.normalTags = []
 
-
-
     let ifmainTagValue = false
     let ifmainTagValueCheck = false
     let ifOCRFinished = false
 
-
-
-    fs.writeFile(path.resolve(__dirname, '../../../../data/ocrData.json'), JSON.stringify(ocrData, null, 4), (err) => {
+    fs.writeFile(path.resolve(__dirname, '../../../../../data/ocrData.json'), JSON.stringify(ocrData, null, 4), (err) => {
         if (err) throw err
         else {
             console.log("write-ocrData")
@@ -183,8 +173,6 @@ function handleOcrData(ocrData, ifShow, callback) {
     // 字数过少，有问题
     if (ocrData.words_result_num < 8) {
         if (ifShow) {
-            // showNotification("error", "OCR返回结果过少，请检查游戏分辨率和打开的界面是否正确")
-
             artifactNotification.result = "error"
             artifactNotification.msg = "OCR返回结果过少，请检查游戏分辨率和打开的界面是否正确"
             sendMsgToFloatingWin(artifactNotification)
@@ -227,7 +215,6 @@ function handleOcrData(ocrData, ifShow, callback) {
                     artifactData.position = toPostionName[item.words]
                     // 中文名
                     artifactNotification.position = item.words
-
                     continue
                 }
 
@@ -268,7 +255,6 @@ function handleOcrData(ocrData, ifShow, callback) {
                 // 获取主属性的数值
                 if (ifmainTagValue) {
                     if (isNaN(item.words.replace(/,|%/g, ""))) {
-                        console.log("--------------------")
                         continue
                     }
                     ifmainTagValue = false
@@ -436,8 +422,9 @@ function handleOcrData(ocrData, ifShow, callback) {
 
     artifactData.omit = false
 
+    // 如果得不到圣遗物的具体名字，有问题
     if (artifactData.detailName == null) {
-        fs.writeFile(path.resolve(__dirname, '../../../../data/errorArtifactData.json'), JSON.stringify(artifactData, null, 4), (err) => {
+        fs.writeFile(path.resolve(__dirname, '../../../../../data/errorArtifactData.json'), JSON.stringify(artifactData, null, 4), (err) => {
             if (err) throw err
             else {
                 artifactNotification.result = "error"
@@ -456,23 +443,22 @@ function handleOcrData(ocrData, ifShow, callback) {
     }
 }
 
-
+// 将处理好的数据写入本地
 function writeOCRData(writeData, ifShow, callback) {
-    fs.readFile(path.resolve(__dirname, '../../../../data/artifacts.json'), function (err, data) {
+    fs.readFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), function (err, data) {
         if (err) {
             if (ifShow) {
                 showNotification("error", "读取圣遗物记录失败")
             }
             // throw err;
         } else {
-            fs.readFile(path.resolve(__dirname, '../../../../config/ocrConfig.json'), function (err, resIfd) {
+            fs.readFile(path.resolve(__dirname, '../../../../../config/ocrConfig.json'), function (err, resIfd) {
                 if (err) {
                     throw err
                 } else {
                     let ifDereplication = JSON.parse(resIfd.toString()).ifDereplication
                     let dataSource = JSON.parse(data.toString())
                     if (Object.keys(dataSource).length != 0) {
-                        // dataSource[writeData.position].push(writeData)
                     } else {
                         // 初始化
                         dataSource = {
@@ -482,7 +468,6 @@ function writeOCRData(writeData, ifShow, callback) {
                             cup: [],
                             head: []
                         }
-                        // dataSource[writeData.position].push(writeData)
                     }
                     // md5运算生成ID
                     writeData.id = crypto.createHash('md5').update(JSON.stringify(writeData)).digest("hex")
@@ -504,7 +489,7 @@ function writeOCRData(writeData, ifShow, callback) {
                                             let writeCallBackData = {
                                                 error_code: 1000000
                                             }
-                                            fs.writeFile(path.resolve(__dirname, '../../../../data/ocrData.json'), JSON.stringify(writeCallBackData, null, 4), (err) => {
+                                            fs.writeFile(path.resolve(__dirname, '../../../../../data/ocrData.json'), JSON.stringify(writeCallBackData, null, 4), (err) => {
                                                 if (err) throw err
                                                 else {}
                                             })
@@ -524,7 +509,7 @@ function writeOCRData(writeData, ifShow, callback) {
 
                     dataSource[writeData.position].push(writeData)
 
-                    fs.writeFile(path.resolve(__dirname, '../../../../data/artifacts.json'), JSON.stringify(dataSource, null, 4), (err) => {
+                    fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(dataSource, null, 4), (err) => {
                         if (err) throw err
                         else {
                             if (callback) {
@@ -540,10 +525,10 @@ function writeOCRData(writeData, ifShow, callback) {
     });
 }
 
-
+// 清空存储的圣遗物
 function artifactsReset(callback) {
     let data = {}
-    fs.writeFile(path.resolve(__dirname, '../../../../data/artifacts.json'), JSON.stringify(data, null, 4), (err) => {
+    fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(data, null, 4), (err) => {
         if (err) throw err
         else {
             console.log("reset")
@@ -554,8 +539,9 @@ function artifactsReset(callback) {
     })
 }
 
+// 将圣遗物导出到剪贴板
 function expoetToClicpBoard(callback) {
-    fs.readFile(path.resolve(__dirname, '../../../../data/artifacts.json'), function (err, data) {
+    fs.readFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), function (err, data) {
         if (err) {
             // throw err;
         } else {
@@ -566,6 +552,7 @@ function expoetToClicpBoard(callback) {
         }
     })
 }
+
 module.exports = {
     getAccessToken,
     saveAccessToken,

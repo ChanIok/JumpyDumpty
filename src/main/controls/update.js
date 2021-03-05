@@ -11,10 +11,7 @@ const path = require('path')
 const axios = require('axios')
 const request = require("request");
 
-
-
 const {
-  createGzip,
   createUnzip
 } = require('zlib');
 const {
@@ -120,11 +117,12 @@ function getLatestVersionPackage(win) {
     if (err) {
       console.log("get-pack-err")
       win.webContents.send("getVersionFinished", "error-get")
+    } else {
+      console.log("downloaded-package");
+      uZip(() => {
+        updateSourceHandle(win)
+      })
     }
-    console.log("downloaded-package");
-    uZip(() => {
-      updateSourceHandle(win)
-    })
   })
 }
 

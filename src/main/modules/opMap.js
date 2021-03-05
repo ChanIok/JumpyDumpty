@@ -1,6 +1,3 @@
-const fs = require('fs')
-const path = require('path')
-
 const {
     globalShortcut,
     BrowserWindow
@@ -9,18 +6,8 @@ const addonSwitch = require('../../build/Release/SwitchToWindow.node');
 
 let mapwin
 
-function reloadMap(ipcData) {
-    // 开关打开才重载入
-    if (ipcData.mapConfig.ifHotKey) {
-        if (mapwin == null) {
-            createMap(ipcData)
-        } else {
-            destroyMap(ipcData.mapConfig)
-            createMap(ipcData)
-        }
-    }
-}
 
+// 创建地图
 function createMap(ipcData, callback) {
     let dataLink = "https://" + ipcData.mapConfig.link
     mapwin = new BrowserWindow({
@@ -43,12 +30,22 @@ function createMap(ipcData, callback) {
     if (callback) {
         callback()
     }
-
-
-
 }
 
+// 重新载入地图，切换地图源时用到
+function reloadMap(ipcData) {
+    // 开关打开才重载入
+    if (ipcData.mapConfig.ifHotKey) {
+        if (mapwin == null) {
+            createMap(ipcData)
+        } else {
+            destroyMap(ipcData.mapConfig)
+            createMap(ipcData)
+        }
+    }
+}
 
+// 销毁地图
 function destroyMap(mapConfig) {
     if (mapwin) {
         mapwin.destroy()
@@ -56,8 +53,8 @@ function destroyMap(mapConfig) {
     }
 }
 
+// 注册地图热键
 function mapShotCutRegister(ipcData) {
-    // console.log(ipcData)
     globalShortcut.register(ipcData.mapConfig.hotKey, () => {
         if (mapwin == null) {
             createMap(ipcData, () => {
