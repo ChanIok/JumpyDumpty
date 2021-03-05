@@ -258,7 +258,7 @@
                                     currentVersion +
                                     "，正在获取更新包..."
                             } else {
-                                this.updateStatus = "已经是最新版的蹦蹦炸弹啦：" + latestVersion
+                                this.updateStatus = "已经是最新版的蹦蹦炸弹啦：" + currentVersion
                             }
                         } else if (res == "success-ready") {
                             this.ifToUpdate = true

@@ -54,6 +54,8 @@ let jsdelivrUrl = 'https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/updateResourc
 
 // 获取最新版本信息
 function getLatestVersionInfo(win) {
+  ifScriptDownload = false
+
   console.log("start-to-getVersion")
   axios({
     url: jsdelivrUrl + 'latest.json' + "?_=" + Date.parse(new Date()) / 1000,
@@ -62,22 +64,20 @@ function getLatestVersionInfo(win) {
     timeout: 20000,
   }).then(function (latestResData) {
 
-
     latestRes = latestResData.data
 
-
-    console.log(latestRes.version, ",now:", appVersion)
+    console.log("latest:", latestRes.version, ",current:", appVersion)
 
     win.webContents.send("getVersionFinished", "success-version", latestRes.version, appVersion)
-    getLatestVersionPackage(win)
+    getLatestVersionScript(win)
   }, function (err) {
     win.webContents.send("getVersionFinished", "error-get")
     console.log("get-latest-err")
   })
 }
 
-// 获取升级压缩包
-function getLatestVersionPackage(win) {
+// 获取更新脚本
+function getLatestVersionScript(win) {
   if (latestRes.version > appVersion) {
     fs.mkdirSync(path.resolve(__dirname, '../../../../temp'), {
       recursive: true
@@ -94,26 +94,38 @@ function getLatestVersionPackage(win) {
       else {}
     })
 
-
-    // 获取更新包
-    let url = jsdelivrUrl + latestRes.version + '/app.asar.gz' + "?_=" + Date.parse(new Date()) / 1000
-    // let url = 'http://127.0.0.1:10996/app.asar.gz'
-    let stream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/app.asar.gz'));
-    request(url).pipe(stream).on("close", function (err) {
+    let scrpitUrl = jsdelivrUrl + latestRes.version + '/script.js' + "?_=" + Date.parse(new Date()) / 1000
+    // let url = 'http://127.0.0.1:10996/script.js'
+    let scrpitStream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/script.js'));
+    request(scrpitUrl).pipe(scrpitStream).on("close", function (err) {
       if (err) {
-        console.log("get-pack-err")
+        console.log("get-script-err")
         win.webContents.send("getVersionFinished", "error-get")
+      } else {
+        console.log("script-downloaded");
+        getLatestVersionPackage(win)
       }
-      console.log("downloaded");
-      uZip(() => {
-        updateSourceHandle(win)
-      })
-
     })
-
-
   }
+}
 
+
+// 获取升级压缩包
+function getLatestVersionPackage(win) {
+  // 获取更新包
+  let url = jsdelivrUrl + latestRes.version + '/app.asar.gz' + "?_=" + Date.parse(new Date()) / 1000
+  // let url = 'http://127.0.0.1:10996/app.asar.gz'
+  let stream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/app.asar.gz'));
+  request(url).pipe(stream).on("close", function (err) {
+    if (err) {
+      console.log("get-pack-err")
+      win.webContents.send("getVersionFinished", "error-get")
+    }
+    console.log("downloaded-package");
+    uZip(() => {
+      updateSourceHandle(win)
+    })
+  })
 }
 
 // 解压
@@ -126,7 +138,6 @@ function uZip(callback) {
       console.error('uZiperror:', err);
       process.exitCode = 1;
     }
-
     callback()
   });
 }
@@ -157,28 +168,14 @@ function updateSourceHandle(win) {
   })
 }
 
-// 获取更新脚本
-function getLatestVersionScript() {
-  let scrpitUrl = jsdelivrUrl + latestRes.version + '/script.js' + "?_=" + Date.parse(new Date()) / 1000
-  // let url = 'http://127.0.0.1:10996/script.js'
-  let scrpitStream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/script.js'));
-  request(scrpitUrl).pipe(scrpitStream).on("close", function (err) {
-    if (err) {
-      console.log("get-script-err")
-      win.webContents.send("getVersionFinished", "error-get")
-    }
-    console.log("script-downloaded");
-    let {
-      preScript
-    } = require(path.resolve(__dirname, '../../../../temp/script.js'))
-    preScript()
-  })
-}
 
 
 
 function readyToUpdate() {
-  getLatestVersionScript()
+  let {
+    preScript
+  } = require(path.resolve(__dirname, '../../../../temp/script.js'))
+  preScript()
   console.log('ready-to-update');
   app.on('will-quit', () => {
     runExe()
@@ -240,7 +237,7 @@ function runAutoUpdate(win) {
   ifAutoUpdate = true
   clearTemp()
   getLatestVersionInfo(win)
- 
+
 }
 
 function runAfterScript() {
