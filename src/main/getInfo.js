@@ -11,7 +11,6 @@ const {
 
 
 
-let mhyVersion = "2.2.1"
 let cookie = ""
 
 
@@ -43,7 +42,7 @@ function getUserInfo(uid,callback) {
                 'cookie': cookie,
                 'DS': getDS(),
                 'Origin': 'https://webstatic.mihoyo.com',
-                'x-rpc-app_version': '2.3.0',
+                'x-rpc-app_version': '2.4.0',
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 7.1.2; SM-G960F Build/N2G48H; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/68.0.3440.70 Safari/537.36 miHoYoBBS/2.5.1',
                 'x-rpc-client_type': '5',
                 'Referer': 'https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6',
@@ -77,7 +76,7 @@ function getSpiralAbyssInfo(uid,callback) {
                 'cookie': cookie,
                 'DS': getDS(),
                 'Origin': 'https://webstatic.mihoyo.com',
-                'x-rpc-app_version': '2.3.0',
+                'x-rpc-app_version': '2.4.0',
                 'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Unspecified Device) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36 miHoYoBBS/2.2.0',
                 'x-rpc-client_type': '5',
                 'Referer': 'https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6',
@@ -122,7 +121,7 @@ function getCharactersInfo(uid, characterIDs,callback) {
             'cookie': cookie,
             'DS': getDS(),
             'Origin': 'https://webstatic.mihoyo.com',
-            'x-rpc-app_version': '2.3.0',
+            'x-rpc-app_version': '2.4.0',
             'User-Agent': 'Mozilla/5.0 (Linux; Android 9; Unspecified Device) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/39.0.0.0 Mobile Safari/537.36 miHoYoBBS/2.2.0',
             'x-rpc-client_type': '5',
             'Referer': 'https://webstatic.mihoyo.com/app/community-game-records/index.html?v=6',
@@ -174,8 +173,8 @@ function getServer(uid) {
 
 // 获取签名
 function getDS() {
-    // v2.3.0-web @povsister & @journey-ad
-    let n= 'h8w582wxwgqvahcdkpvdhbh2w9casgfl'
+    // v2.4.0-web @Azure99
+    let n= 'pbcfcvnfsm5s2w4x3lsq8caor7v8nlqm'
     let i = Math.round(((new Date().getTime()) / 1000)).toString()
     let r = randomString(6)
     let c = crypto.createHash('md5').update("salt=" + n + "&t=" + i + "&r=" + r).digest("hex")

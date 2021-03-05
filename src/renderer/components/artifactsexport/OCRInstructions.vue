@@ -15,7 +15,9 @@
             默认注册热键为 Alt+R，<span style="font-weight: 600;">按下该热键后，开启快速抓取模式</span> ，程序自动捕捉鼠标点击事件来抓取游戏屏幕并 OCR
             识别（此时只需要逐个点击<span style="font-weight: 600;font-size: 20px;">背包</span>的圣遗物即可）
         </span>
-
+        <span class="note">
+            点完记得再按一次热键关闭快速抓取模式，之后可以导出json到剪贴板
+        </span>
         <a-divider />
 
         <div class="title">
