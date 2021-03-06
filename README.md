@@ -10,8 +10,7 @@ Electron + Vue + AntDesign
 
 ## 最新问题：
 
-1.1.3版本以及以下的自动更新功能，部分电脑不能支持，退出程序后，可尝试手动将\resources\temp\app文件替换到\resources\app.asar（记得重命名为app.asar）
-或者等1.1.5版本更新
+待反馈
 
 
 ## 功能：
@@ -60,11 +59,16 @@ Electron + Vue + AntDesign
 
 ## 使用：
 
-v1.1.4 已打包，解压直接运行：  
+v1.1.5 已打包，解压直接运行：  
 https://wws.lanzous.com/b01zxfq8j
 密码:boom
 
 ## 更新日志：
+
+### v1.1.5
+
+- 修复更新失败的问题
+- 增加了帮助文档
 
 ### v1.1.4
 
