@@ -39,6 +39,9 @@ const {
     expoetToClicpBoard
 } = require('../modules/ocr')
 
+const {
+    getUserInfo
+} = require('../modules/getInfo')
 
 
 function handleIPC(ipcData) {
@@ -133,6 +136,7 @@ function handleIPC(ipcData) {
         createMap(ipcData)
     })
     ipcMain.on('destroyMap', () => {
+      
         ipcData.mapConfig.ifHotKey = false
         writeMapConfig(ipcData.mapConfig)
         destroyMap(ipcData.mapConfig)

@@ -1,7 +1,14 @@
+const {
+    Tray,
+    Menu,
+} = require('electron')
+
+const path = require('path')
+
  //创建系统通知区菜单
  let tray
- function createTray(){
-    tray = new Tray(path.resolve(__dirname, './assets/red.ico'));
+ function createTray(win){
+    tray = new Tray(path.resolve(__dirname, '../../assets/logo.ico'));
     const contextMenu = Menu.buildFromTemplate([{
             label: '显示界面',
             click: () => {
@@ -25,4 +32,5 @@
         win.isVisible() ? win.setSkipTaskbar(false) : win.setSkipTaskbar(true);
     })
  }
+
 module.exports={createTray}

@@ -28,7 +28,7 @@ function ocrHotKeyRegister(ipcData) {
         // 关闭热键OCR
         if (ifOCRHotKey) {
             ifOCRHotKey = false
-            ipcData.contents.send("ocrShotCutClose")
+            ipcData.win.webContents.send("ocrShotCutClose")
             showNotification("close")
             ioStop()
         } else { // 开启
@@ -40,7 +40,7 @@ function ocrHotKeyRegister(ipcData) {
             ioHook.on('mouseup', () => {
                 if (ifMouseClick && !ifOCRing) {
                     ifOCRing = true
-                    ipcData.contents.send("ocrShotCutWorking")
+                    ipcData.win.webContents.send("ocrShotCutWorking")
                     // 延迟发送OCR请求
                     setTimeout(() => {
                         ocrArtifac(ipcData)
@@ -56,7 +56,8 @@ function ocrHotKeyRegister(ipcData) {
             console.log("start-ocr")
             ifOCRHotKey = true
             showNotification("open")
-            ipcData.contents.send("ocrShotCutOpen")
+            ipcData.win.webContents.send("ocrShotCutOpen")
+    
             ioStart()
         }
     })

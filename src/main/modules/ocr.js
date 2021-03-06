@@ -101,7 +101,7 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
     let img = clipboard.readImage()
     if (!img.isEmpty()) {
         let imgUrl = img.toDataURL()
-        fs.readFile(path.resolve(__dirname, '../../../../config/ocrConfig.json'), function (err, resAPI) {
+        fs.readFile(path.resolve(__dirname, '../../../../../config/ocrConfig.json'), function (err, resAPI) {
             if (err) {
                 throw err
             } else {
@@ -109,7 +109,7 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
                 // 将图片写入本地
                 fs.writeFile(path.resolve(__dirname, '../../../../../data/artifact.jpg'), Buffer.from(imgUrl.replace('data:image/png;base64,', ''), 'base64'), (err) => {
                     console.log('save-img-success')
-                    fs.readFile(path.resolve(__dirname, '../../../../config/baiduToken.json'), function (err, resToken) {
+                    fs.readFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), function (err, resToken) {
                         if (err) {
                             throw err
                         } else {

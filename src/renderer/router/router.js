@@ -9,6 +9,7 @@ import RoleIndex from '../components/menu/RoleIndex.vue'
 import InfoQuery from '../components/menu/InfoQuery.vue'
 import ArtifactsExport from '../components/menu/ArtifactsExport.vue'
 import Setting from '../components/menu/Setting.vue'
+import Documentation from '../components/menu/Documentation.vue'
 
 import View from '../components/gamemap/View.vue'
 import MapSetting from '../components/gamemap/Setting.vue'
@@ -97,6 +98,10 @@ const routes = [
             },
 
             {
+                path: 'documentation',
+                component: Documentation,
+            },
+            {
                 path: 'setting',
                 component: Setting,
             }, {
@@ -109,9 +114,9 @@ const routes = [
                 }, {
                     path: 'ocrmain',
                     component: OCRMain
-                },{
+                }, {
                     path: 'ocrinstructions',
-                    component:OCRInstructions
+                    component: OCRInstructions
                 }]
             },
         ]

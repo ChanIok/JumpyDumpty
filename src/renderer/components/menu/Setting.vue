@@ -21,7 +21,7 @@
                         @change="saveCookie" style="width: 100%" />
                 </div>
             </div>
-            <span class="explain">Cookie可自动开启功能自动获取。手动获取方法可参考：https://github.com/yinghualuowu/GenshinDailyHelper</span>
+            <span class="explain">Cookie可自动开启功能自动获取。</span>
             <a-divider />
 
 
@@ -102,14 +102,6 @@
                     </a-button>
                 </div>
             </div>
-
-
-            <a-divider />
-
-            <span class="title" style="margin-top: 10px;">关于</span>
-            <span class="note">本程序开源且免费，当前版本{{appVersion}}，项目地址：https://github.com/ChanIok/JumpyDumpty</span>
-            <span class="note">问题可直接在GitHub或NGA反馈：https://bbs.nga.cn/read.php?tid=25647353</span>
-            <span class="explain">如果觉得有用，可以给个star，谢谢你</span>
 
         </div>
     </div>
@@ -192,12 +184,7 @@
                         this.yPosRatio = res.data.yPosRatio
                     }
                 })
-                axios.get('../../package.json').then(res => {
-                    if (res.status === 200) {
-                        console.log('package', res.data)
-                        this.appVersion = res.data.version
-                    }
-                })
+      
             },
             onAutoCookieSwitchChange(checked) {
                 if (checked) {

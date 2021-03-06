@@ -1,11 +1,9 @@
 const {
     app,
     BrowserWindow,
-    Tray,
-    Menu,
 } = require('electron')
 
-const path = require('path')
+
 const gotTheLock = app.requestSingleInstanceLock()
 
 const {
@@ -79,7 +77,7 @@ function createWindow() {
     })
 
     //创建系统通知区菜单
-    createTray()
+    createTray(win)
 
     // win.loadURL("http://localhost:8080")
     win.loadFile('./src/renderer/index.html')

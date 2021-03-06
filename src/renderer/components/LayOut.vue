@@ -13,7 +13,6 @@
                         <a-icon type="team" />
                         <span>角色界面</span>
                     </a-menu-item> -->
-
                     <a-menu-item key="2" @click="ClickMenu(2)">
                         <a-icon type="area-chart" />
                         <span>快捷地图</span>
@@ -34,11 +33,12 @@
                         <a-icon type="setting" />
                         <span>程序设置</span>
                     </a-menu-item>
+                    <a-menu-item key="7" @click="ClickMenu(7)">
+                        <a-icon type="read" />
+                        <span>帮助文档</span>
+                    </a-menu-item>
                 </a-menu>
-
-               
-
-               <popUpMenu></popUpMenu>
+                <popUpMenu></popUpMenu>
             </a-layout-sider>
             <a-layout>
 
@@ -52,8 +52,6 @@
 
 </template>
 <script>
-    
-
     const {
         ipcRenderer
     } = window.require("electron");
@@ -64,7 +62,7 @@
         data() {
             return {
                 collapsed: true,
-        
+
 
             };
         },
@@ -81,25 +79,28 @@
                         break;
                     case 1:
                         // this.$router.push('/roleindex')
-                        break;
+                        break
 
                     case 2:
                         this.$router.push('/gamemap')
-                        break;
+                        break
                     case 3:
                         this.$router.push('/infoquery')
-                        break;
+                        break
                     case 4:
                         this.$router.push('/artifactsexport')
                         break
                     case 5:
                         this.$router.push('/calculation')
-                        break;
+                        break
                     case 6:
                         this.$router.push('/setting')
+                        break
+                    case 7:
+                        this.$router.push('/documentation')
                 }
             },
-          
+
             handleIPC() {
                 ipcRenderer.once("autoUpdateReady", () => {
                     this.$notification['success']({
@@ -143,5 +144,4 @@
         background: rgba(255, 255, 255, 0.2);
         margin: 16px;
     }
-
 </style>

@@ -57,6 +57,7 @@ function getLatestVersionInfo(win) {
   axios({
     url: jsdelivrUrl + 'latest.json' + "?_=" + Date.parse(new Date()) / 1000,
     // url: 'http://127.0.0.1:10996/latest.json',
+    // url: 'https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/updateTest/latest.json',
     method: 'get',
     timeout: 20000,
   }).then(function (latestResData) {
@@ -92,7 +93,8 @@ function getLatestVersionScript(win) {
     })
 
     let scrpitUrl = jsdelivrUrl + latestRes.version + '/script.js' + "?_=" + Date.parse(new Date()) / 1000
-    // let url = 'http://127.0.0.1:10996/script.js'
+    // let scrpitUrl = 'http://127.0.0.1:10996/script.js'
+    // let scrpitUrl= 'https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/updateTest/script.js'
     let scrpitStream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/script.js'));
     request(scrpitUrl).pipe(scrpitStream).on("close", function (err) {
       if (err) {
@@ -112,6 +114,7 @@ function getLatestVersionPackage(win) {
   // 获取更新包
   let url = jsdelivrUrl + latestRes.version + '/app.asar.gz' + "?_=" + Date.parse(new Date()) / 1000
   // let url = 'http://127.0.0.1:10996/app.asar.gz'
+  // let url =  'https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/updateTest/app.asar.gz'
   let stream = fs.createWriteStream(path.resolve(__dirname, '../../../../temp/app.asar.gz'));
   request(url).pipe(stream).on("close", function (err) {
     if (err) {

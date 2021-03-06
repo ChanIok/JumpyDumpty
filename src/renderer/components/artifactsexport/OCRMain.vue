@@ -27,7 +27,7 @@
             <span class="explain" style="margin-top: 14px;margin-bottom: 5px;">仅支持双键组合</span>
 
             <span class="explain"
-                style="margin-bottom: 15px;">热键已注册，按下热键，逐个点击圣遗物即可。程序会自动捕捉鼠标点击事件并进行截图OCR识别。</span>
+                style="margin-bottom: 15px;">热键默认已注册，程序会自动捕捉鼠标点击事件并进行截图OCR识别。</span>
 
             <span class="note">防止重复录入</span>
             <div class="dereplication-switch">
