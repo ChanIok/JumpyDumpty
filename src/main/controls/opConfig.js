@@ -163,7 +163,7 @@ function writeConfig(config) {
 }
 
 function writeOcrConfig(ocrConfig) {
-    writeDoc(ocrCofig, "config", "ocrConfig")
+    writeDoc(ocrConfig, "config", "ocrConfig")
 }
 
 function writeDoc(dataWrite, fileType, fileName) {

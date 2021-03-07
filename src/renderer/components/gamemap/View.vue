@@ -46,7 +46,7 @@
                 ipcRenderer.once('getCookieFinished', () => {
                     axios.get('../../../../data/cookie.json').then(res => {
                         if (res.status === 200) {
-                            if (res.data.cookie.length < 128) {
+                            if (res.data.cookie.indexOf('cookie_token')==-1) {
                                 this.$notification['error']({
                                     message: 'Cookie异常',
                                     description: '请检查是否登录或网络连接通畅，本次获取Cookie为：' + res.data.cookie,
