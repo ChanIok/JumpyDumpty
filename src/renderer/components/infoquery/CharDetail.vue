@@ -1,5 +1,5 @@
 <template>
-    <div id="third-content-dt"  v-if="ifReadFinished">
+    <div id="third-content-dt" v-if="ifReadFinished">
         <div id="constellations-list-wrapper">
 
             <div class="constellations-list-item" v-for="(item,i) in character.constellations" :key="i">
@@ -7,7 +7,7 @@
                 <a-popover :title="item.name" placement="right">
                     <template slot="content">
                         <div style="max-width: 400px;">
-                            {{item.effect}}
+                            <p v-html="item.effect" style="margin: 0;"></p>
                         </div>
 
                     </template>
@@ -19,9 +19,6 @@
                         <a-avatar shape="circle" :size="52" icon="lock" v-if="!item.is_actived"
                             style="background-color: inherit;position: absolute;opacity: 0.8;" />
                     </div>
-                    <!-- <div class="constellations-list-item">
-        {{item.name}}
-        </div> -->
                 </a-popover>
             </div>
 
@@ -29,7 +26,6 @@
 
 
         <div id="char-img-bg" :style="{backgroundImage: 'url(' + character.image + ')'}">
-            <!-- Electro -->
         </div>
         <div id="char-img-element" :style="{backgroundImage: 'url(' + charImg[this.character.element] + ')'}">
 
@@ -123,11 +119,7 @@
 
 
 
-
-
                 <div class="list-item-wrapper" v-for="(item,i) in character.reliquaries" :key="i">
-
-
                     <span class="title">{{item.pos_name}}</span>
                     <a-popover :title="item.set.name" placement="left">
                         <template slot="content">
@@ -323,7 +315,7 @@
         background-color: rgba(250, 250, 250, 0.98);
         overflow: auto;
     }
-    
+
     #list-wrapper::-webkit-scrollbar {
         width: 8px;
         /*高宽分别对应横竖滚动条的尺寸*/
@@ -402,12 +394,6 @@
     .list-header-stars {
         margin-top: 20px;
     }
-
-
-
-
-
-
 </style>
 
 <script>
@@ -417,7 +403,7 @@
         // props:['charid'],
         data() {
             return {
-                ifReadFinished:false,
+                ifReadFinished: false,
                 charID: this.$route.params.id,
                 charELement: '',
                 charImg: {
@@ -443,7 +429,7 @@
                         for (let item of res.data.data.avatars) {
                             if (item.id == this.charID) {
                                 this.character = item
-                                this.ifReadFinished =true
+                                this.ifReadFinished = true
                                 this.handleData()
                                 break
                             }
@@ -452,25 +438,31 @@
                 })
             },
             handleData() {
-        
-                    if (this.character.element == "None") {
-                        this.charELement = "无属性"
-                    } else if (this.character.element == "Anemo") {
-                        this.charELement = "风"
-                    } else if (this.character.element == "Pyro") {
-                        this.charELement = "火"
-                    } else if (this.character.element == "Geo") {
-                        this.charELement = "岩"
-                    } else if (this.character.element == "Electro") {
-                        this.charELement= "雷"
-                    } else if (this.character.element == "Cryo") {
-                        this.charELement = "冰"
-                    } else if (this.character.element == "Hydro") {
-                        this.charELement= "水"
-                    } else {
-                        this.charELement= "草"
-                    }
-                
+
+                if (this.character.element == "None") {
+                    this.charELement = "无属性"
+                } else if (this.character.element == "Anemo") {
+                    this.charELement = "风"
+                } else if (this.character.element == "Pyro") {
+                    this.charELement = "火"
+                } else if (this.character.element == "Geo") {
+                    this.charELement = "岩"
+                } else if (this.character.element == "Electro") {
+                    this.charELement = "雷"
+                } else if (this.character.element == "Cryo") {
+                    this.charELement = "冰"
+                } else if (this.character.element == "Hydro") {
+                    this.charELement = "水"
+                } else {
+                    this.charELement = "草"
+                }
+                for (let constellationNum in this.character.constellations) {
+                    this.character.constellations[constellationNum].effect = this.character.constellations[
+                        constellationNum].effect.replace(/<.*?>/g, "")
+                    this.character.constellations[constellationNum].effect = this.character.constellations[
+                        constellationNum].effect.replace(/\\n/g, "<br>")
+                }
+
             },
         }
 

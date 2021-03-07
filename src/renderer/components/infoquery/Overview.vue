@@ -345,8 +345,7 @@
 
     #third-content-ov {
         overflow: auto;
-        padding: 50px;
-        padding-top: 30px;
+        padding: 30px;
         color: #404040;
         font-size: 14px;
         height: 100%;
