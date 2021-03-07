@@ -7,7 +7,7 @@ const {
 const gotTheLock = app.requestSingleInstanceLock()
 
 const {
-    initConfig,
+    initialize
 } = require('./main/controls/opConfig')
 
 
@@ -23,17 +23,15 @@ const {
     createTray
 } = require('./main/controls/tray')
 
-const {
-    ocrHotKeyRegister
-} = require('./main/modules/iohook')
+
 
 let win
 let willQuitApp = false
 let ipcData = {
     ocrConfig: {
-        api: 'default',
-        hotKey: 'default',
-        ifDereplication: 'default',
+        api: '',
+        hotKey: '',
+        ifDereplication: '',
         widthRatio: '',
         heightRatio: '',
         xPosRatio: '',
@@ -49,7 +47,7 @@ let ipcData = {
         className: '',
         windowName: '',
         ifAutoCookieButton: false,
-        ifAutoUpdate:true
+        ifAutoUpdate: true
     }
 }
 
@@ -100,19 +98,17 @@ if (!gotTheLock) {
     })
     app.on('ready', () => {
         createWindow()
-        initConfig(ipcData) //加载设置
+        initialize(ipcData) //初始化并加载设置
         handleIPC(ipcData)
 
         setTimeout(() => {
-            if(ipcData.config.ifAutoUpdate){
+            if (ipcData.config.ifAutoUpdate) {
                 console.log("auto-update")
                 runAutoUpdate(win)
             }
         }, 5000);
 
-        setTimeout(() => {
-            ocrHotKeyRegister(ipcData)
-        }, 1000);
+ 
     })
 }
 
