@@ -7,7 +7,25 @@
                 style="max-width: 256px; width: 256px;flex:0 0 256px">
 
                 <div id="search-wrapper">
-                    <a-input-search id="id-search" placeholder="请输入ID" enter-button @search="getInfo" />
+                    <a-input-search id="id-search" placeholder="请输入UID" enter-button @search="getInfo" @change="()=>{this.ifQueryHistory=true
+                    }" v-model="inputUID" @click="showHistory" /> 
+                    <span id="clear-input" @click="clearInput" v-if="inputUID.length">
+                        <a-icon type="close" style="font-size: 12px" /></span>
+                    <transition name="slide-fade">
+                        <div id="query-history-wrapper" v-if="ifQueryHistory">
+                            <a-menu id="query-history">
+                                <a-menu-item class="query-history-item" v-for="(uid,i) in uids" :key="i"
+                                    v-if="String(uid).indexOf(inputUID)!=-1">
+                                    <span @click="clickQueryItem(uid)" class="query-history-item-span">{{uid}}</span>
+                                    <span class="delete-query-item" @click="deleteQueryItem(i)">
+                                        <a-icon type="close" style="font-size: 12px" /></span>
+                                </a-menu-item>
+                                <a-menu-item class="query-history-item" @click="clearQueryHistory" v-if="uids.length">
+                                    <span>清除历史记录</span>
+                                </a-menu-item>
+                            </a-menu>
+                        </div>
+                    </transition>
                 </div>
                 <div id="menu-wrapper">
                     <a-menu mode="inline" :default-selected-keys="['1']" :default-open-keys="['sub1']">
@@ -47,7 +65,6 @@
 
                     </a-menu>
                 </div>
-
             </a-layout-sider>
             <a-layout id="third-content">
                 <my-title id="my-title"></my-title>
@@ -57,6 +74,7 @@
             </a-layout>
         </a-layout>
     </div>
+
 </template>
 
 <script>
@@ -71,12 +89,17 @@
         data() {
             return {
                 ifRouterView: true,
+                ifQueryHistory: false,
                 characters: [],
+                uids: [],
+                uidsShow: [],
+                inputUID: ''
+ 
             }
         },
         mounted() {
             this.readData()
-
+            this.hideHistory()
         },
         components: {
             myTitle
@@ -88,6 +111,12 @@
                         // console.log(res.data.data.avatars)
                         this.characters = res.data.data.avatars
                         this.handleData()
+                    }
+                })
+                axios.get('../../../../data/queryUidsHistory.json').then(res => {
+                    if (res.status === 200) {
+                        this.uids = res.data.uids
+
                     }
                 })
             },
@@ -120,6 +149,21 @@
                         path: '/infoquery'
                     })
                     ipcRenderer.send("getInfo", value)
+                    this.ifQueryHistory = false;
+                }
+            },
+            clearInput() {
+                this.inputUID = ''
+            },
+            uidsHistoryPush(value) {
+                if (String(value).length != 0) {
+                    for (let item of this.uids) {
+                        if (item == parseInt(value))
+                            return
+                    }
+                    console.log("111222")
+                    this.uids.push(parseInt(value))
+                    ipcRenderer.send("writeQueryUidsHistory", this.uids)
                 }
             },
             getDetail(charID) {
@@ -131,12 +175,48 @@
                     this.ifRouterView = true
                 })
             },
+            showHistory() {
+                this.ifQueryHistory = true
+                this.uidsShow = this.uids
+            },
+            hideHistory() {
+                document.addEventListener('click', (e) => {
+                    let sp = document.getElementById("search-wrapper")
+                    if (sp) {
+                        if (!sp.contains(event.target)) {
+                            this.ifQueryHistory = false;
+                        }
+                    }
+                })
+            },
+            clickQueryItem(value) {
+                this.inputUID = String(value)
+                this.handleIPC()
+                this.$router.push({
+                    path: '/infoquery'
+                })
+                ipcRenderer.send("getInfo", String(value))
+                this.ifQueryHistory = false
+            },
+            deleteQueryItem(index) {
+                setTimeout(() => {
+                    this.uids.splice(index, 1)
+                    ipcRenderer.send("writeQueryUidsHistory", this.uids)
+                }, 0);
+            },
+            clearQueryHistory() {
+                setTimeout(() => {
+                    this.uids = []
+                    ipcRenderer.send("writeQueryUidsHistory", this.uids)
+                }, 0);
+            },
             handleIPC() {
                 ipcRenderer.once('getInfoFinished', () => {
                     axios.get('../../../../data/userInfo.json').then(res => {
                         if (res.status === 200) {
                             console.log("获取信息结束")
                             if (res.data.retcode == 0) {
+                                this.uidsHistoryPush(this.inputUID)
                                 this.$notification['success']({
                                     message: '查询成功',
                                     description: '已获取该用户所有信息',
@@ -192,10 +272,65 @@
         padding-top: 32px;
         padding-left: 10px;
         background-color: rgb(250, 250, 250);
+        position: relative;
     }
 
     #id-search {
         height: 40px;
+    }
+
+    #clear-input {
+        position: absolute;
+        right: 42px;
+        text-align: center;
+        line-height: 32px;
+        cursor: pointer;
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        color: rgba(0, 0, 0, 0.2);
+        z-index: 997;
+    }
+    #clear-input:hover{
+        color: rgb(255, 86, 86);
+    }
+
+    #query-history-wrapper {
+        position: absolute;
+
+        z-index: 994;
+    }
+
+    #query-history {
+        border: 0;
+        background: rgba(252, 252, 252, 0.95) !important;
+        width: 246px;
+        border-bottom: rgba(0, 0, 0, 0.05) solid 1px;
+        border-left: rgba(0, 0, 0, 0.05) solid 1px;
+    }
+
+    .query-history-item {
+        margin: 0 !important;
+        height: 35px;
+        position: relative;
+        font-size: 13px;
+        border-bottom: rgba(0, 0, 0, 0.05) solid 1px;
+    }
+
+    #query-history:last-child {
+        border-bottom: 0
+    }
+
+    .query-history-item-span {
+        display: inline-block;
+        height: 35px;
+        width: 210px;
+    }
+
+    .delete-query-item {
+        position: absolute;
+        right: 5px;
+        color: rgba(0, 0, 0, 0.2);
     }
 
     #menu-wrapper {
@@ -295,5 +430,19 @@
         margin: 0;
         padding: 0;
         background-color: rgb(250, 250, 250);
+    }
+
+
+    .slide-fade-enter-active {
+        transition: all .15s ease;
+    }
+
+    .slide-fade-leave-active {
+        transition: all .15s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+
+    .slide-fade-enter,
+    .slide-fade-leave-to {
+        opacity: 0;
     }
 </style>

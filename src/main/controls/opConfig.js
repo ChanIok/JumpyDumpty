@@ -76,6 +76,9 @@ async function initDoc() {
             cookie: "",
         }
         let artifactsWrite = {}
+        let queryUidsHistoryWrite={
+            uids:[]
+        }
 
         let rw1 = readAndWriteDoc(mapConfigWrite, "config", "mapconfig")
         let rw2 = readAndWriteDoc(baiduTokenWrite, "config", "baiduToken")
@@ -84,8 +87,9 @@ async function initDoc() {
 
         let rw5 = readAndWriteDoc(cookieWrite, "data", "cookie")
         let rw6 = readAndWriteDoc(artifactsWrite, "data", "artifacts")
+        let rw7 = readAndWriteDoc(queryUidsHistoryWrite, "data", "queryUidsHistory")
 
-        Promise.all([rw1, rw2, rw3, rw4, rw5, rw6]).then(() => {
+        Promise.all([rw1, rw2, rw3, rw4, rw5, rw6,rw7]).then(() => {
             resolve("done")
         })
 

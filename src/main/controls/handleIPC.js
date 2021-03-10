@@ -42,6 +42,9 @@ const {
 const {
     getUserInfo
 } = require('../modules/getInfo')
+const {
+    writeQueryUidsHistory
+} = require('../modules/opInfoData')
 
 
 function handleIPC(ipcData) {
@@ -50,6 +53,10 @@ function handleIPC(ipcData) {
         getUserInfo(data, () => {
             e.reply('getInfoFinished')
         })
+    })
+    //查询历史记录
+    ipcMain.on('writeQueryUidsHistory', (e, value) => {
+        writeQueryUidsHistory(value)
     })
 
     // Cookie相关
@@ -136,7 +143,7 @@ function handleIPC(ipcData) {
         createMap(ipcData)
     })
     ipcMain.on('destroyMap', () => {
-      
+
         ipcData.mapConfig.ifHotKey = false
         writeMapConfig(ipcData.mapConfig)
         destroyMap(ipcData.mapConfig)
@@ -196,6 +203,8 @@ function handleIPC(ipcData) {
         console.log('IPC-manualUpdate')
         readyToUpdate()
     })
+
+ 
 }
 
 

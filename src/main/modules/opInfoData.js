@@ -22,8 +22,20 @@ function writeSpiralAbyssData(spiralAbyssInfo) {
     })
 }
 
+// 写入查询历史记录
+function writeQueryUidsHistory(value) {
+    let QueryUidsHistory={
+        uids:value
+    }
+    fs.writeFile(path.resolve(__dirname, '../../../../../data/queryUidsHistory.json'), JSON.stringify(QueryUidsHistory, null, 4), (err) => {
+        if (err) throw err
+    })
+}
+
+
 module.exports = {
     writeUserData,
     writeCharactersData,
-    writeSpiralAbyssData
+    writeSpiralAbyssData,
+    writeQueryUidsHistory
 }
