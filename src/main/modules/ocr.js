@@ -141,7 +141,7 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
 
 async function sendImgToBaidu(img, api, access_token, ifShow) {
     return new Promise(resolve => {
-        let imgData = img.toDataURL()
+        let imgData = img.toDataURL().replace("data:image/png;base64,", "")
         axios({
             url: api + access_token,
             method: 'post',
@@ -363,7 +363,17 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
                                 ifPercentageTag = true
 
                                 // 百度OCR可能有识别不了小数点的情况
-                                if (normalTag.value.replace(/%/g, "") > 46.8) {
+                                if (normalTag.value.replace(/%/g, "") > 7.8 * (artifactData.level / 4 + 1) && tagName == "暴击伤害") {
+                                    normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
+                                } else if (normalTag.value.replace(/%/g, "") > 3.9 * (artifactData.level / 4 + 1) && tagName == "暴击率") {
+                                    normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
+                                } else if (normalTag.value.replace(/%/g, "") > 6.5 * (artifactData.level / 4 + 1) && tagName == "元素充能效率") {
+                                    normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
+                                } else if (normalTag.value.replace(/%/g, "") > 5.8 * (artifactData.level / 4 + 1) && tagName == "攻击力") {
+                                    normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
+                                } else if (normalTag.value.replace(/%/g, "") > 7.3 * (artifactData.level / 4 + 1) && tagName == "防御力") {
+                                    normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
+                                } else if (normalTag.value.replace(/%/g, "") > 5.8 * (artifactData.level / 4 + 1) && tagName == "生命值") {
                                     normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 1000
                                 } else {
                                     normalTag.value = parseFloat(normalTag.value.replace(/%/g, "")) / 100
@@ -446,7 +456,7 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
                             artifactData.setName = toSetName[setNameItem]
                             artifactNotification.setName = setNameItem
                             ifOCRFinished = true
-                           
+
                             break
                         }
 
@@ -459,7 +469,7 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
 
 
 
-        
+
     setsName = setToDetail[artifactData.setName]
     artifactData.detailName = setsName[artifactData.position]
     artifactNotification.detailName = artifactData.detailName
