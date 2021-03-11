@@ -5,7 +5,7 @@
             <span v-if="ifSuccess">{{detailName}}+{{level}}</span>
             <span v-if="!ifSuccess&&!ifReady">识别失败</span>
             <div id="header-right" v-if="ifSuccess">
-                <span :key="i" v-for="(item,i) in star">★</span>
+                <span :key="i" v-for="(item,i) in star" style="color: rgba(0, 0, 0, 0.5);">★</span>
             </div>
         </div>
 
@@ -126,7 +126,7 @@
         position: relative;
     }
     #header-right{
-        color: rgba(0, 0, 0, 0.85);
+        
         position: absolute;
         right: 0px;
         text-align: right;
@@ -138,7 +138,7 @@
     }
 
     .div-line {
-        width: 65%;
+        width: 63%;
     }
 
     .div-line b {
@@ -147,7 +147,6 @@
         display: inline-block;
         width: 180px;
         height: 1px;
-        _overflow: hidden;
         vertical-align: middle;
     }
 

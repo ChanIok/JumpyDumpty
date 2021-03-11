@@ -7,10 +7,10 @@
                 style="max-width: 256px; width: 256px;flex:0 0 256px">
 
                 <div id="search-wrapper">
-                    <a-input-search id="id-search" placeholder="请输入UID" enter-button @search="getInfo" @change="()=>{this.ifQueryHistory=true
+                    <a-input-search id="id-search" ref="uidInput" placeholder="请输入UID" enter-button @search="getInfo" @change="()=>{this.ifQueryHistory=true
                     }" v-model="inputUID" @click="showHistory" /> 
                     <span id="clear-input" @click="clearInput" v-if="inputUID.length">
-                        <a-icon type="close" style="font-size: 12px" /></span>
+                        <a-icon type="close" style="font-size: 12px"  /></span>
                     <transition name="slide-fade">
                         <div id="query-history-wrapper" v-if="ifQueryHistory">
                             <a-menu id="query-history">
@@ -154,6 +154,7 @@
             },
             clearInput() {
                 this.inputUID = ''
+                this.$refs.uidInput.focus()
             },
             uidsHistoryPush(value) {
                 if (String(value).length != 0) {
