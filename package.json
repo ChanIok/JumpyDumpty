@@ -48,7 +48,7 @@
   },
   "keywords": [],
   "author": "ChanIok",
-  "license": "MIT",
+  "license": "WTFPL",
   "private": true,
   "gypfile": true,
   "devDependencies": {
