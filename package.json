@@ -14,6 +14,7 @@
   },
   "build": {
     "appId": "com.genshin.jumpydumpty",
+    "productName": "BoomBoom",
     "mac": {
       "target": [
         "dmg",
@@ -66,16 +67,17 @@
     "vue-template-compiler": "^2.6.12",
     "webpack": "^5.19.0",
     "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "ant-design-vue": "^1.7.3",
+    "vue": "^2.6.12"
   },
   "dependencies": {
-    "ant-design-vue": "^1.7.3",
+    
     "axios": "^0.21.1",
     "crypto": "^1.0.1",
     "iohook": "^0.6.6",
     "node-addon-api": "^3.1.0",
-    "request": "^2.88.2",
-    "vkeys": "^1.2.0",
-    "vue": "^2.6.12"
+    "vkeys": "^1.2.0"
+   
   }
 }

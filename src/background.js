@@ -77,8 +77,8 @@ function createWindow() {
     //创建系统通知区菜单
     createTray(win)
 
-    // win.loadURL("http://localhost:8080")
-    win.loadFile('./src/renderer/index.html')
+    win.loadURL("http://localhost:8080")
+    // win.loadFile('./src/renderer/index.html')
     ipcData.win = win
 }
 

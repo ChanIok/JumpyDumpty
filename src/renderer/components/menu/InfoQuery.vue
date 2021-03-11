@@ -281,7 +281,7 @@
 
     #clear-input {
         position: absolute;
-        right: 42px;
+        right: 44px;
         text-align: center;
         line-height: 32px;
         cursor: pointer;

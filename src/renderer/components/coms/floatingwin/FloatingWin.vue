@@ -2,9 +2,11 @@
     <div class="win-wrapper">
         <div id="header">
             <span v-if="ifReady">{{note}}</span>
-            <span v-if="ifSuccess">{{detailName}}</span>
+            <span v-if="ifSuccess">{{detailName}}+{{level}}</span>
             <span v-if="!ifSuccess&&!ifReady">识别失败</span>
-            <div></div>
+            <div id="header-right" v-if="ifSuccess">
+                <span :key="i" v-for="(item,i) in star">★</span>
+            </div>
         </div>
 
         <div class="div-line"><b></b></div>
@@ -41,6 +43,8 @@
                 ifSuccess: false,
                 note: '热键已经开启',
                 msg: '请点击鼠标以抓取圣遗物',
+                level:'',
+                star:'',
                 detailName: '',
                 setName: '',
                 position: '',
@@ -59,6 +63,8 @@
                         if (res.result == "success") {
                             this.ifSuccess = true
                             this.ifReady = false
+                            this.level = res.level
+                            this.star = res.star
                             this.detailName = res.detailName
                             this.position = res.position
                             this.mainTag = res.mainTag
@@ -117,8 +123,14 @@
         font-size: 18px;
         line-height: 18px;
         width: 100%;
+        position: relative;
     }
-
+    #header-right{
+        color: rgba(0, 0, 0, 0.85);
+        position: absolute;
+        right: 0px;
+        text-align: right;
+    }
     #container {
         font-size: 14px;
         line-height: 22px;
@@ -126,7 +138,7 @@
     }
 
     .div-line {
-        width: 100%;
+        width: 65%;
     }
 
     .div-line b {

@@ -100,59 +100,73 @@ function ocrArtifactDetails(ipcData, ifShow, callback) {
     // 读取剪贴板的图片
     let img = clipboard.readImage()
     if (!img.isEmpty()) {
-        let imgUrl = img.toDataURL()
+
+        let imgSize = img.getSize()
+        artifactStarLevel = img.crop({
+            x: 0,
+            y: parseInt(imgSize.height * 0.43),
+            width: parseInt(imgSize.width * 0.6),
+            height: parseInt(imgSize.height * 0.22)
+        })
+        // 将等级和星级图片写入本地
+        fs.writeFileSync(path.resolve(__dirname, '../../../../../data/artifactStarLevel.jpg'), artifactStarLevel.toJPEG(100))
+        // 将图片写入本地
+        fs.writeFileSync(path.resolve(__dirname, '../../../../../data/artifact.jpg'), img.toJPEG(100))
+
         fs.readFile(path.resolve(__dirname, '../../../../../config/ocrConfig.json'), function (err, resAPI) {
             if (err) {
                 throw err
             } else {
                 let api = JSON.parse(resAPI.toString()).api
-                // 将图片写入本地
-                fs.writeFile(path.resolve(__dirname, '../../../../../data/artifact.jpg'), Buffer.from(imgUrl.replace('data:image/png;base64,', ''), 'base64'), (err) => {
-                    console.log('save-img-success')
-                    fs.readFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), function (err, resToken) {
-                        if (err) {
-                            throw err
-                        } else {
-                            let access_token = JSON.parse(resToken.toString()).access_token
-                            // 再读
-                            fs.readFile(path.resolve(__dirname, '../../../../../data/artifact.jpg'), function (err, data) {
-                                if (err) {
-                                    throw err
-                                } else {
-                                    let image = data
-                                    let imgData = Buffer.from(image).toString('base64');
-                                    axios({
-                                        url: api + access_token,
-                                        method: 'post',
-                                        data: qs.stringify({
-                                            'image': imgData
-                                        }),
-                                        headers: {
-                                            'content-type': 'application/x-www-form-urlencoded'
-                                        }
-                                    }).then(function (response) {
-                                        // console.log(response.data)
-                                        handleOcrData(response.data, ifShow, callback)
-                                    }, function (err) {
-                                        if (ifShow) {
-                                            artifactNotification.result = "error"
-                                            artifactNotification.msg = "发送申请失败"
-                                            sendMsgToFloatingWin(artifactNotification)
-                                            // showNotification("error", "发送申请失败")
-                                        }
-                                    })
-                                }
-                            })
-                        }
-                    })
+
+                fs.readFile(path.resolve(__dirname, '../../../../../config/baiduToken.json'), function (err, resToken) {
+                    if (err) {
+                        throw err
+                    } else {
+                        let access_token = JSON.parse(resToken.toString()).access_token
+                        let func1 = sendImgToBaidu(img, api, access_token, ifShow)
+                        let func2 = sendImgToBaidu(artifactStarLevel, api, access_token)
+                        Promise.all([func1, func2]).then((res) => {
+                            console.log("sendImgFinished")
+                            handleOcrData(res[0], res[1], ifShow, callback)
+                        })
+
+                    }
                 })
             }
         })
     }
 }
 
+
+async function sendImgToBaidu(img, api, access_token, ifShow) {
+    return new Promise(resolve => {
+        let imgData = img.toDataURL()
+        axios({
+            url: api + access_token,
+            method: 'post',
+            data: qs.stringify({
+                'image': imgData
+            }),
+            headers: {
+                'content-type': 'application/x-www-form-urlencoded'
+            }
+        }).then(function (response) {
+            resolve(response.data)
+        }, function (err) {
+            if (ifShow) {
+                artifactNotification.result = "error"
+                artifactNotification.msg = "发送申请失败"
+                sendMsgToFloatingWin(artifactNotification)
+            }
+        })
+    })
+}
+
+
+
 // 对百度OCR的返回数据进行提取
-function handleOcrData(ocrData, ifShow, callback) {
+function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
     let artifactData = {
         mainTag: {},
         normalTags: []
@@ -161,14 +175,16 @@ function handleOcrData(ocrData, ifShow, callback) {
 
     let ifmainTagValue = false
     let ifmainTagValueCheck = false
+
     let ifOCRFinished = false
 
     fs.writeFile(path.resolve(__dirname, '../../../../../data/ocrData.json'), JSON.stringify(ocrData, null, 4), (err) => {
         if (err) throw err
-        else {
-            console.log("write-ocrData")
-        }
     })
+    fs.writeFile(path.resolve(__dirname, '../../../../../data/ocrSecondData.json'), JSON.stringify(ocrSecondData, null, 4), (err) => {
+        if (err) throw err
+    })
+
 
     // 字数过少，有问题
     if (ocrData.words_result_num < 8) {
@@ -205,6 +221,28 @@ function handleOcrData(ocrData, ifShow, callback) {
         return
     }
 
+    // 获取星数和等级
+    if (ocrSecondData.words_result_num)
+        for (let item of ocrSecondData.words_result) {
+            // 获取星数,如果有星星
+            if (item.words.match(/[\u2605]/g) != null) {
+                artifactData.star = item.words.match(/[\u4e00-\u9fa5]|\u2605|\u2606/g).length
+                artifactNotification.star = artifactData.star
+                continue
+            }
+
+            // 获取等级
+            // 如果有中文，大概率是没有识别等级数据
+            if (item.words.match(/[\u4e00-\u9fa5]/g) != null) {
+                artifactData.level = 0
+            } else {
+                artifactData.level = parseInt(item.words.replace(/[\u4e00-\u9fa5]|\+/g, ""))
+                artifactNotification.level = artifactData.level
+                break
+            }
+        }
+
+
     if (ocrData.words_result_num)
         for (let item of ocrData.words_result) {
             if (!ifOCRFinished) {
@@ -218,6 +256,8 @@ function handleOcrData(ocrData, ifShow, callback) {
                     continue
                 }
 
+
+
                 // 获取主属性名称
                 if (item.words in toTagName) {
 
@@ -226,7 +266,7 @@ function handleOcrData(ocrData, ifShow, callback) {
 
                         artifactNotification.mainTag.name = "生命值"
 
-                    } else if (artifactData.position == "feather") {
+                    } else if (artifactData.position == "plume") {
                         artifactData.mainTag.name = toTagName["固定攻击力"]
 
                         artifactNotification.mainTag.name = "攻击力"
@@ -245,10 +285,8 @@ function handleOcrData(ocrData, ifShow, callback) {
                 if (ifmainTagValueCheck && !ifmainTagValue) {
                     if (isNaN(item.words.replace(/,|%/g, ""))) {
                         ifmainTagValueCheck = false
-
                         continue
                     }
-
                     ifmainTagValue = true
                 }
 
@@ -261,7 +299,7 @@ function handleOcrData(ocrData, ifShow, callback) {
 
 
                     // 花和羽
-                    if (artifactData.position == "flower" || artifactData.position == "feather") {
+                    if (artifactData.position == "flower" || artifactData.position == "plume") {
                         // 有逗号或句号的普通数值
                         if (item.words.indexOf(",") >= 0) {
                             artifactData.mainTag.value = parseInt(item.words.replace(/,/g, ""))
@@ -365,7 +403,7 @@ function handleOcrData(ocrData, ifShow, callback) {
                                     console.log(normalTag.value)
                                     normalTagNotification.value = (normalTag.value * 100).toFixed(1) + "%"
                                 }
-                            } else if (normalTag.value < 11) {
+                            } else if (normalTag.value < 11 && artifactData.star > 3) {
                                 normalTag.value = parseInt('1' + normalTag.value)
 
                                 normalTagNotification.value = normalTag.value
@@ -400,6 +438,7 @@ function handleOcrData(ocrData, ifShow, callback) {
                 // 获取套装名字,判断结束
                 for (let setNameItem in toSetName) {
                     if (item.words.indexOf(setNameItem) >= 0) {
+
                         // 有的套装名字会包含在具体的名字上,防止提前结束
                         if (artifactData.position == null) {
                             continue
@@ -407,6 +446,7 @@ function handleOcrData(ocrData, ifShow, callback) {
                             artifactData.setName = toSetName[setNameItem]
                             artifactNotification.setName = setNameItem
                             ifOCRFinished = true
+                           
                             break
                         }
 
@@ -415,8 +455,12 @@ function handleOcrData(ocrData, ifShow, callback) {
             }
         }
 
-    setsName = setToDetail[artifactData.setName]
 
+
+
+
+        
+    setsName = setToDetail[artifactData.setName]
     artifactData.detailName = setsName[artifactData.position]
     artifactNotification.detailName = artifactData.detailName
 
@@ -458,15 +502,14 @@ function writeOCRData(writeData, ifShow, callback) {
                 } else {
                     let ifDereplication = JSON.parse(resIfd.toString()).ifDereplication
                     let dataSource = JSON.parse(data.toString())
-                    if (Object.keys(dataSource).length != 0) {
-                    } else {
+                    if (Object.keys(dataSource).length != 0) {} else {
                         // 初始化
                         dataSource = {
                             flower: [],
-                            feather: [],
-                            sand: [],
-                            cup: [],
-                            head: []
+                            plume: [],
+                            sands: [],
+                            goblet: [],
+                            circlet: []
                         }
                     }
                     // md5运算生成ID
