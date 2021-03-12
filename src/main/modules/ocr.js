@@ -174,7 +174,7 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
     artifactNotification.normalTags = []
 
     let ifmainTagValue = false
-    let ifmainTagValueCheck = false
+    // let ifmainTagValueCheck = false
 
     let ifOCRFinished = false
 
@@ -210,6 +210,8 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
                 artifactNotification.msg = "OCR申请过于频繁，请减慢点击速度"
             } else if (ocrData.error_code == 110) { //token错误
                 artifactNotification.msg = "Access Token设置错误"
+            } else if (ocrData.error_code == 17) { //token错误
+                artifactNotification.msg = "该API的请求次数已达到上限，请在OCR设置界面更换其他API（标准版）"
             } else {
                 artifactNotification.msg = JSON.stringify(ocrData, null, 4)
             }
@@ -282,17 +284,24 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
                 }
 
                 // 检测主属性的数值是否提前录入错误,有则重新录入
-                if (ifmainTagValueCheck && !ifmainTagValue) {
-                    if (isNaN(item.words.replace(/,|%/g, ""))) {
-                        ifmainTagValueCheck = false
-                        continue
-                    }
-                    ifmainTagValue = true
-                }
+                // if (ifmainTagValueCheck && !ifmainTagValue) {
+                //     if (isNaN(item.words.replace(/,|%/g, ""))) {
+                //         ifmainTagValueCheck = false
+                //         continue
+                //     } else if (parseFloat(item.words.replace(/,|%/g, "")) < 21) {
+                //         ifmainTagValueCheck = false
+                //         continue
+                //     }
+                //     ifmainTagValue = true
+                // }
 
                 // 获取主属性的数值
                 if (ifmainTagValue) {
                     if (isNaN(item.words.replace(/,|%/g, ""))) {
+                        continue
+                    } else if (parseFloat(item.words.replace(/,|%|./g, "")) < 21) {
+                        ifmainTagValueCheck = false
+                        console.log("main-tag-value-skip")
                         continue
                     }
                     ifmainTagValue = false
@@ -467,7 +476,20 @@ function handleOcrData(ocrData, ocrSecondData, ifShow, callback) {
 
 
 
-
+    // 如果得不到圣遗物的套装名字，有问题
+    if (artifactData.setName == null) {
+        fs.writeFile(path.resolve(__dirname, '../../../../../data/errorArtifactData.json'), JSON.stringify(artifactData, null, 4), (err) => {
+            if (err) throw err
+            else {
+                artifactNotification.result = "error"
+                artifactNotification.msg = "分析该圣遗物异常，请手动录入！"
+                if (ifShow) {
+                    sendMsgToFloatingWin(artifactNotification)
+                }
+            }
+        })
+        return
+    }
 
 
     setsName = setToDetail[artifactData.setName]

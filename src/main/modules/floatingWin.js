@@ -12,10 +12,11 @@ function createFloatingWindow() {
         // height: 580, 
         width: 360, //悬浮窗口的宽度
         height: 250, //悬浮窗口的高度
+        maxHeight:252,
         type: 'toolbar',
         show: false,
         frame: false, //要创建无边框窗口
-        resizable: true, //禁止窗口大小缩放
+        resizable: true,  
         webPreferences: {
             // devTools: false //关闭调试
             nodeIntegration: true
@@ -32,7 +33,7 @@ function createFloatingWindow() {
     let loopTimes = 100
     for (let i = 0; i < loopTimes; i++) {
         setTimeout(() => {
-            floatingWin.setPosition(size.width - winSize[0], size.height - winSize[1]);
+            floatingWin.setPosition(size.width - winSize[0], size.height - winSize[1] );
         }, 10);
     }
 

@@ -54,7 +54,7 @@
             </div>
 
             <span class="explain" style="margin-top: 30px;">需登录百度OCR官网获取，此处填入API Key和Secret Key获取即可</span>
-            <span class="explain" style="margin-top: 0px;">Access Token获取方法可参考该up的视频：https://www.bilibili.com/video/BV1yN411X7iv?t=23</span>
+            <span class="explain" style="margin-top: 0px;">Access Token获取方法请参考本程序的帮助文档</span>
             
 
 

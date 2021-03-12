@@ -163,7 +163,7 @@
                                         3840×2160，2560X1440，1920×1080，1600×900，1366×768，1280×720
                                     </span>
                                     <span class="note">
-                                        建议窗口模式下运行，分辨率越高越好，Api 建议使用高精度版
+                                        建议窗口模式下运行，分辨率越高越好，Api 建议使用高精度版（但实测高精度版不一定比标准版好）
                                     </span>
 
                                 </div>
@@ -177,7 +177,7 @@
                                 <a-divider style="margin-top: 10px;" />
                                 <div class="second-descript">
                                     <span class="note">
-                                        暂时没处理圣遗物的等级和星数，<span style="font-weight: 600;">导出的 json 可配合 worm
+                                        <span style="font-weight: 600;">导出的 json 可配合 worm
                                             大佬的项目使用：莫娜占卜铺（见本程序的莫娜占卜铺）</span>
                                     </span>
                                     <span class="note">
@@ -278,6 +278,15 @@
                             </a-list-item>
                             <a-list-item class="list-item">
                                 <div class="second-title">
+                                    查询时显示：该用户数据未公开
+                                </div>
+                                <a-divider style="margin-top:10px;" />
+                                <div class="second-descript">
+                                   由于用户查询是调用米游社的接口，如果对方的米游社没绑定或者设置资料隐藏就会无法查询
+                                </div>
+                            </a-list-item>
+                            <a-list-item class="list-item">
+                                <div class="second-title">
                                     OCR的热键按下后，没反应，看不到右下角的窗口
                                 </div>
                                 <a-divider style="margin-top:10px;" />
@@ -286,6 +295,26 @@
                                     大概率是热键冲突，你可以参考地图部分<a href="#change-hot-key">尝试更换其他热键</a>
                                     <br>
                                     亦有可能是未获得管理员权限，程序无法捕捉鼠标点击事件
+                                </div>
+                            </a-list-item>
+                            <a-list-item class="list-item">
+                                <div class="second-title">
+                                   录入的圣遗物有误，或者提示分析该圣遗物异常
+                                </div>
+                                <a-divider style="margin-top:10px;" />
+                                <div class="second-descript">
+                                   有误的数据可以在莫娜占卜铺直接修改
+                                    <br>
+                                    分析该圣遗物异常多半是百度OCR返回的数据有问题，可以切换下API接口（实测高精度版不一定比标准版好）
+                                </div>
+                            </a-list-item>
+                            <a-list-item class="list-item">
+                                <div class="second-title">
+                                    出现了莫名其妙的弹窗报错或者其他问题
+                                </div>
+                                <a-divider style="margin-top:10px;" />
+                                <div class="second-descript">
+                                    可以试试万能的重新解压运行和重启大法（作者收到的很多莫名其妙的问题都是这样解决的）
                                 </div>
                             </a-list-item>
                         </a-list>
@@ -302,11 +331,11 @@
     const shell = require('electron').shell
     import myTitle from '../coms/Title.vue'
     import axios from 'axios'
-    
+
     export default {
         data() {
             return {
-                appVersion:''
+                appVersion: ''
             }
         },
         mounted() {
