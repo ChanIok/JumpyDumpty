@@ -75,7 +75,13 @@ async function initDoc() {
         let cookieWrite = {
             cookie: "",
         }
-        let artifactsWrite = {}
+        let artifactsWrite = {
+            flower: [],
+            plume: [],
+            sands: [],
+            goblet: [],
+            circlet: []
+        }
         let queryUidsHistoryWrite={
             uids:[]
         }

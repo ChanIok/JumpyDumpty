@@ -534,18 +534,11 @@ function writeOCRData(writeData, ifShow, callback) {
                 } else {
                     let ifDereplication = JSON.parse(resIfd.toString()).ifDereplication
                     let dataSource = JSON.parse(data.toString())
-                    if (Object.keys(dataSource).length != 0) {} else {
-                        // 初始化
-                        dataSource = {
-                            flower: [],
-                            plume: [],
-                            sands: [],
-                            goblet: [],
-                            circlet: []
-                        }
-                    }
+
                     // md5运算生成ID
-                    writeData.id = crypto.createHash('md5').update(JSON.stringify(writeData)).digest("hex")
+                    let hashData=writeData
+                    delete hashData.omit
+                    writeData.id = crypto.createHash('md5').update(JSON.stringify(hashData)).digest("hex")
 
                     // 去重复，比对md5
                     if (ifDereplication) {
@@ -602,7 +595,13 @@ function writeOCRData(writeData, ifShow, callback) {
 
 // 清空存储的圣遗物
 function artifactsReset(callback) {
-    let data = {}
+    let data = {
+        flower: [],
+        plume: [],
+        sands: [],
+        goblet: [],
+        circlet: []
+    }
     fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(data, null, 4), (err) => {
         if (err) throw err
         else {

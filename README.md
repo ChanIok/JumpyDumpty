@@ -59,11 +59,16 @@ Electron + Vue + AntDesign
 
 ## 使用：
 
-v1.1.8 已打包，解压直接运行：  
+v1.1.9 已打包，解压直接运行：  
 https://wws.lanzous.com/b01zxfq8j
 密码:boom
 
 ## 更新日志：
+
+### v1.1.9
+
+- 修复了启动程序会清空保存的圣遗物的大问题
+- 重新计算ID
 
 ### v1.1.8
 
