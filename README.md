@@ -36,9 +36,9 @@ Electron + Vue + AntDesign
 
   依赖：百度 OCR 的 API，需要提供百度 OCR 的相关 Key。 
 
-  抓取保存在data/artifacts.json文件 导出的 json 可配合 worm 大佬的项目使用：[莫娜占卜铺](https://github.com/wormtql/genshin_artifact)，[官网](http://www.genshin.art/
+  抓取保存在data/artifacts.json文件 导出的 json 可配合 worm 大佬的项目使用：[莫娜占卜铺](https://github.com/wormtql/genshin_artifact)，[官网](http://www.genshin.art/)
 
-**具体使用方法请参考程序的帮助手册**
+**具体使用方法请参考程序的```帮助手册```**
 
 ## 使用：
 
