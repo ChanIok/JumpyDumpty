@@ -26,15 +26,13 @@
             </a-button>
             <span class="explain" style="margin-top: 14px;margin-bottom: 5px;">仅支持双键组合</span>
 
-            <span class="explain"
-                style="margin-bottom: 15px;">热键默认已注册，程序会自动捕捉鼠标点击事件并进行截图OCR识别。</span>
+            <span class="explain" style="margin-bottom: 15px;">热键默认已注册，程序会自动捕捉鼠标点击事件并进行截图OCR识别。</span>
 
             <span class="note">防止重复录入</span>
             <div class="dereplication-switch">
                 <a-switch @change="onDereplicationChange" :checked="ifDereplication" />
             </div>
-            <span class="explain"
-            style="margin-bottom: 10px;margin-top:5px;">已存储的圣遗物将不再录入</span>
+            <span class="explain" style="margin-bottom: 10px;margin-top:5px;">已存储的圣遗物将不再录入</span>
 
             <a-divider />
 
@@ -50,11 +48,20 @@
 
             <a-divider />
             <span class="title">导出</span>
-            <!-- <span class="note">点击按钮导出圣遗物</span> -->
             <div>
                 <a-button type="primary" @click="expoetToClicpBoard">
                     导出Json到剪贴板
                 </a-button>
+            </div>
+
+
+            <a-divider />
+            <span class="title">导入</span>
+            <div>
+                <a-button type="primary" @click="importFromClicpBoard">
+                    从剪贴板导入到本地
+                </a-button>
+                <span class="explain" style="margin-bottom: 10px;margin-top:5px;">仅支持莫娜占卜铺的导出格式，自动与本地圣遗物去重合并</span>
             </div>
 
         </div>
@@ -215,6 +222,25 @@
                 ipcRenderer.removeAllListeners('expoetToClicpBoardFinished')
                 ipcRenderer.removeAllListeners('artifactsResetFinished')
             },
+            importFromClicpBoard() {
+                ipcRenderer.send("importFromClicpBoard")
+                ipcRenderer.once('importFromClicpBoardFinished', (e, res, importNum,repeatNum) => {
+                    if (res == "success") {
+                        this.$notification['success']({
+                            message: '导入json成功',
+                            description: `本次成功新增导入圣遗物数：${importNum} (已忽略重复的圣遗物数：${repeatNum})`,
+                            duration: 4.5,
+                        })
+                    } else {
+                        this.$notification['error']({
+                            message: '导入失败',
+                            description: '剪贴板为空',
+                            duration: 4.5,
+                        });
+                    }
+
+                })
+            },
             expoetToClicpBoard() {
                 ipcRenderer.send("expoetToClicpBoard")
                 ipcRenderer.once('expoetToClicpBoardFinished', () => {
@@ -224,9 +250,7 @@
                         duration: 4.5,
                     });
                 })
-
-            },
-
+            }
         }
     };
 </script>

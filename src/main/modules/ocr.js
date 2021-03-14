@@ -536,7 +536,7 @@ function writeOCRData(writeData, ifShow, callback) {
                     let dataSource = JSON.parse(data.toString())
 
                     // md5运算生成ID
-                    let hashData=writeData
+                    let hashData=JSON.parse(JSON.stringify(writeData))
                     delete hashData.omit
                     writeData.id = crypto.createHash('md5').update(JSON.stringify(hashData)).digest("hex")
 
@@ -593,44 +593,10 @@ function writeOCRData(writeData, ifShow, callback) {
     });
 }
 
-// 清空存储的圣遗物
-function artifactsReset(callback) {
-    let data = {
-        flower: [],
-        plume: [],
-        sands: [],
-        goblet: [],
-        circlet: []
-    }
-    fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(data, null, 4), (err) => {
-        if (err) throw err
-        else {
-            console.log("reset")
-            if (callback) {
-                callback()
-            }
-        }
-    })
-}
-
-// 将圣遗物导出到剪贴板
-function expoetToClicpBoard(callback) {
-    fs.readFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), function (err, data) {
-        if (err) {
-            // throw err;
-        } else {
-            clipboard.writeText(data.toString())
-            if (callback) {
-                callback()
-            }
-        }
-    })
-}
 
 module.exports = {
     getAccessToken,
     saveAccessToken,
     ocrArtifactDetails,
-    artifactsReset,
-    expoetToClicpBoard
+  
 }

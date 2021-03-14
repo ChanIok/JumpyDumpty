@@ -4,8 +4,6 @@ const {
 } = require('electron')
 
 const {
-    initConfig,
-    loadConfig,
     writeConfig,
     writeMapConfig,
     writeOcrConfig,
@@ -34,11 +32,15 @@ const {
 const {
     getAccessToken,
     ocrArtifactDetails,
-    artifactsReset,
     saveAccessToken,
-    expoetToClicpBoard
 } = require('../modules/ocr')
 
+
+const {
+    artifactsReset,
+    expoetToClicpBoard,
+    artifactsImport
+} = require('../modules/opOCRData')
 const {
     getUserInfo
 } = require('../modules/getInfo')
@@ -87,12 +89,18 @@ function handleIPC(ipcData) {
         saveAccessToken(value)
     })
 
+    // 导入圣遗物
+    ipcMain.on('importFromClicpBoard', (e) => {
+        artifactsImport(ipcData)
+    })
+
     // 清空圣遗物
     ipcMain.on('artifactsReset', (e) => {
         artifactsReset(() => {
             e.reply("artifactsResetFinished")
         })
     })
+
     // 导出圣遗物到剪贴板
     ipcMain.on('expoetToClicpBoard', (e) => {
         expoetToClicpBoard(() => {
@@ -204,7 +212,7 @@ function handleIPC(ipcData) {
         readyToUpdate()
     })
 
- 
+
 }
 
 
