@@ -215,6 +215,20 @@
                                         width="957px" height="385px" class="docs-imgs" alt="">
                                 </div>
                             </a-list-item>
+                            <a-list-item class="list-item">
+                                <div class="second-title">
+                                    如何将莫娜占卜铺的圣遗物数据导入本地？
+                                </div>
+                                <a-divider style="margin-top: 10px;" />
+                                <div class="second-descript">
+                                    1. 点击莫娜占卜铺的“导出json”按钮，和“复制”按钮
+                                    <img src="https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/images/ocr_8.jpg"
+                                        width="1118px" height="408px" class="docs-imgs" alt="">
+                                    2. 打开圣遗物抓取界面，点击“从剪贴板导入到本地”
+                                    <img src="https://cdn.jsdelivr.net/gh/ChanIok/Dodoco@main/images/ocr_9.jpg"
+                                        width="385px" height="139px" class="docs-imgs" alt="">
+                                </div>
+                            </a-list-item>
                         </a-list>
                     </div>
                     <div id="advanced-settings">
@@ -305,7 +319,7 @@
                                 <div class="second-descript">
                                    有误的数据可以在莫娜占卜铺直接修改
                                     <br>
-                                    分析该圣遗物异常多半是百度OCR返回的数据有问题，可以切换下API接口（实测高精度版不一定比标准版好）
+                                    分析该圣遗物异常多半是百度OCR返回的数据有问题，可以切换下分辨率或者API接口（实测高精度版不一定比标准版好）
                                 </div>
                             </a-list-item>
                             <a-list-item class="list-item">
@@ -314,7 +328,7 @@
                                 </div>
                                 <a-divider style="margin-top:10px;" />
                                 <div class="second-descript">
-                                    可以试试万能的重新解压运行和重启大法（作者收到的很多莫名其妙的问题都是这样解决的）
+                                    可以试试万能的重新解压运行和重启大法，还有关掉你的杀软（作者收到的很多莫名其妙的问题都是这样解决的）
                                 </div>
                             </a-list-item>
                         </a-list>

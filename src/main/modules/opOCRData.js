@@ -10,8 +10,8 @@ const crypto = require('crypto')
 async function artifactsImport(ipcData) {
     let text = clipboard.readText()
     let importNum = 0
-    let repeatNum=0
-    if (text != '') {
+    let repeatNum = 0
+    if (text.match(/{[\s\S]*?}/g) != null) {
 
         // 替换字符串
         text = text.replace(/feather/g, "plume")
@@ -52,23 +52,23 @@ async function artifactsImport(ipcData) {
                     let ifImportSuccess = await compareID(dataSource, hashData)
                     if (ifImportSuccess) {
                         importNum++
-                    }else{
+                    } else {
                         repeatNum++
                     }
 
                 }
             }
         }
-        ipcData.win.webContents.send("importFromClicpBoardFinished", 'success', importNum,repeatNum)
+        ipcData.win.webContents.send("importFromClicpBoardFinished", 'success', importNum, repeatNum)
     } else {
-        ipcData.win.webContents.send("importFromClicpBoardFinished", 'error', "clipBoardNull")
+        ipcData.win.webContents.send("importFromClicpBoardFinished", 'error')
     }
 }
 
 // 查找有无重复的圣遗物
 function compareID(dataSource, hashData) {
     return new Promise(resolve => {
-
+        let ifRepeat = false
         for (let itemName in dataSource) {
             if (dataSource[itemName].length == 0) {
                 continue
@@ -77,19 +77,37 @@ function compareID(dataSource, hashData) {
                 for (let tempItem in temp) {
                     // 有重复的
                     if (temp[tempItem].id == hashData.id) {
-                        resolve(false)
+                        ifRepeat =true
+
+                        if (temp[tempItem].omit != hashData.omit) {
+                            temp[tempItem].omit = hashData.omit
+                            dataSource[itemName] = temp
+                            fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(dataSource, null, 4), (err) => {
+                                if (err) throw err
+                                else {
+                                    console.log("write", temp[tempItem].omit, hashData.omit)
+                                    resolve(false)
+                                }
+                            })
+                        } else {
+                            resolve(false)
+                        }
+
                     }
                 }
             }
         }
-        dataSource[hashData.position].push(hashData)
+        if(!ifRepeat){
+            dataSource[hashData.position].push(hashData)
 
-        fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(dataSource, null, 4), (err) => {
-            if (err) throw err
-            else {
-                resolve(true)
-            }
-        })
+            fs.writeFile(path.resolve(__dirname, '../../../../../data/artifacts.json'), JSON.stringify(dataSource, null, 4), (err) => {
+                if (err) throw err
+                else {
+                    resolve(true)
+                }
+            })
+        }
+   
 
     })
 }

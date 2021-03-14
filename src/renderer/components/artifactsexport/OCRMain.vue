@@ -234,7 +234,7 @@
                     } else {
                         this.$notification['error']({
                             message: '导入失败',
-                            description: '剪贴板为空',
+                            description: '剪贴板的JSON格式有误',
                             duration: 4.5,
                         });
                     }
