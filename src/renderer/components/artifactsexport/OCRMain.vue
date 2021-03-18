@@ -52,6 +52,9 @@
                 <a-button type="primary" @click="expoetToClicpBoard">
                     导出Json到剪贴板
                 </a-button>
+                <a-button @click="expoetToClicpBoardAndReset">
+                    导出后清空本地圣遗物
+                </a-button>
             </div>
 
 
@@ -215,7 +218,26 @@
                 })
 
             },
-
+            expoetToClicpBoardAndReset() {
+                ipcRenderer.send("expoetToClicpBoard")
+                ipcRenderer.once('expoetToClicpBoardFinished', () => {
+                    this.$notification['success']({
+                        message: '导出json成功',
+                        description: '详情请在剪贴板查看',
+                        duration: 4.5,
+                    });
+                })
+                setTimeout(() => {
+                    ipcRenderer.send("artifactsReset");
+                    ipcRenderer.once('artifactsResetFinished', () => {
+                        this.$notification['success']({
+                            message: '重置成功',
+                            description: '已清除所有圣遗物',
+                            duration: 4.5,
+                        });
+                    })
+                }, 50);
+            },
 
             handleIPC() {
                 ipcRenderer.removeAllListeners('artifactsCatchFinished')
@@ -224,7 +246,7 @@
             },
             importFromClicpBoard() {
                 ipcRenderer.send("importFromClicpBoard")
-                ipcRenderer.once('importFromClicpBoardFinished', (e, res, importNum,repeatNum) => {
+                ipcRenderer.once('importFromClicpBoardFinished', (e, res, importNum, repeatNum) => {
                     if (res == "success") {
                         this.$notification['success']({
                             message: '导入json成功',
