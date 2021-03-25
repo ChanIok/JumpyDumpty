@@ -199,6 +199,9 @@ function handleIPC(ipcData) {
     ipcMain.on('writeifAutoUpdate', (e, data) => {
         ipcData.config.ifAutoUpdate = data
         writeConfig(ipcData.config)
+        if(!data){
+            clearTemp()
+        }
     })
 
     ipcMain.on('checkUpdate', (e) => {

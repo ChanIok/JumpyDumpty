@@ -120,6 +120,7 @@
                                 <a-divider style="margin-top: 10px;" />
                                 <div class="second-descript">
                                     1. 获取百度OCR的Access Token，获取方法可参考以下Up的视频
+                                    <br>请确保创建的应用为 <span style="font-weight: 700;">文字识别</span> ，否则会出现"error_code":6的报错！
                                     <span class="note click-link" @click="clickLink('baidu-ocr-help')">
                                         https://www.bilibili.com/video/BV1yN411X7iv?t=23
                                     </span>
@@ -296,7 +297,7 @@
                                 </div>
                                 <a-divider style="margin-top:10px;" />
                                 <div class="second-descript">
-                                   由于用户查询是调用米游社的接口，如果对方的米游社没绑定或者设置资料隐藏就会无法查询
+                                    由于用户查询是调用米游社的接口，如果对方的米游社没绑定或者设置资料隐藏就会无法查询
                                 </div>
                             </a-list-item>
                             <a-list-item class="list-item">
@@ -313,13 +314,23 @@
                             </a-list-item>
                             <a-list-item class="list-item">
                                 <div class="second-title">
-                                   录入的圣遗物有误，或者提示分析该圣遗物异常
+                                    录入的圣遗物有误，或者提示分析该圣遗物异常
                                 </div>
                                 <a-divider style="margin-top:10px;" />
                                 <div class="second-descript">
-                                   有误的数据可以在莫娜占卜铺直接修改
+                                    有误的数据可以在莫娜占卜铺直接修改
                                     <br>
                                     分析该圣遗物异常多半是百度OCR返回的数据有问题，可以切换下分辨率或者API接口（实测高精度版不一定比标准版好）
+                                </div>
+                            </a-list-item>
+                            <a-list-item class="list-item">
+                                <div class="second-title">
+                                    录入的圣遗物失败，提示"error code": 6, "error _msg": No permission to access data
+                                </div>
+                                <a-divider style="margin-top:10px;" />
+                                <div class="second-descript">
+                                  大概率是创建的百度应用不正确，请确保你创建的应用为：文字识别
+                                  <br>已经有部分人反馈按照教程却创建到了语音应用，请在你的 百度智能云-管理中心 核对
                                 </div>
                             </a-list-item>
                             <a-list-item class="list-item">
