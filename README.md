@@ -11,7 +11,7 @@ Electron + Vue + AntDesign
 
 该项目已暂停维护，基础功能仍可以正常使用
 
-圣遗物识别推荐使用功能更强大的[椰羊cocogoat工具箱]：https://github.com/YuehaiTeam/cocogoat
+圣遗物识别推荐使用功能更强大的[椰羊cocogoat工具箱](https://github.com/YuehaiTeam/cocogoat)
 
 “由于这个工具太方便了，作者已经跑去用这个工具了，本仓库暂停更新”
 
