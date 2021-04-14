@@ -25,14 +25,15 @@
                     <span class="note">本程序开源且免费，当前版本{{appVersion}}，项目地址：
                         <span @click="clickLink('github')" class="click-link">
                             https://github.com/ChanIok/JumpyDumpty
-                        </span>最新的进展和问题都会在此公布</span>
-                    <span class="note">使用须知：本程序仅供学习交流，您应承担使用该程序带来的所有风险。</span>
-                    <span class="explain">在学业之余 完全出于个人兴趣的创作，不接受捐赠，如果觉得有用，可以在
-                        <span @click="clickLink('github')" class="click-link">
-                            GitHub
                         </span>
-                        上给个star，这是对我的最大鼓励，谢谢你</span>
-                    <!-- <a-divider /> -->
+                    </span>
+                    <span class="note"> 该项目已暂停维护，推荐使用用户体验更好的椰羊工具箱：
+                        <span @click="clickLink('cocogoat')" class="click-link">
+                            https://bbs.nga.cn/read.php?tid=26328712
+                        </span>
+                    </span>
+                    <span class="note">使用须知：本程序仅供学习交流，您应承担使用该程序带来的所有风险。</span>
+    
                 </div>
                 <div id="thanks">
                     <span class="title">感谢</span>
@@ -329,8 +330,8 @@
                                 </div>
                                 <a-divider style="margin-top:10px;" />
                                 <div class="second-descript">
-                                  大概率是创建的百度应用不正确，请确保你创建的应用为：文字识别
-                                  <br>已经有部分人反馈按照教程却创建到了语音应用，请在你的 百度智能云-管理中心 核对
+                                    大概率是创建的百度应用不正确，请确保你创建的应用为：文字识别
+                                    <br>已经有部分人反馈按照教程却创建到了语音应用，请在你的 百度智能云-管理中心 核对
                                 </div>
                             </a-list-item>
                             <a-list-item class="list-item">
@@ -387,8 +388,9 @@
                     shell.openExternal('https://bbs.nga.cn/read.php?tid=25647353&page=6#pid496610213Anchor')
                 } else if (value == 'git-cookie-get') {
                     shell.openExternal('https://github.com/yinghualuowu/GenshinDailyHelper')
+                } else if (value == 'cocogoat') {
+                    shell.openExternal('https://bbs.nga.cn/read.php?tid=26328712')
                 }
-
 
             },
             loadConfig() {
